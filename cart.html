@@ -164,10 +164,10 @@ function whatsappOrder() {
     message += `\n-----------------\n`;
     message += `Name:\nAddress:\nPhone:\n`;
 
-    let phone = "919347333379"; // 👉 Ikkada nee WhatsApp number pettu. + or 00 vaddhu
+    let phone = "919347333379"; // Nee WhatsApp number - correct ga ne undi
 
-    // Ee line eh main fix - Desktop lo direct chat open cheyadaniki
-    let url = `https://web.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`;
+    // ✅ MAIN FIX - ee line marchu
+    let url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
     window.open(url, "_blank");
 }
