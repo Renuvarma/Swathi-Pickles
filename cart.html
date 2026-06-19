@@ -2,22 +2,68 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Cart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cart - Swathi Pickles</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+  
+  <style>
+    /* Mobile lo cart items peddaga kanipinchadaniki */
+    @media (max-width: 768px) {
+      .cart-item h5 {
+        font-size: 1.2rem!important;
+      }
+      .cart-item p {
+        font-size: 1rem!important;
+      }
+      .cart-item .btn-sm {
+        padding: 0.5rem 0.8rem!important;
+        font-size: 1rem!important;
+      }
+      .cart-item .fw-bold {
+        font-size: 1.1rem!important;
+      }
+      #total {
+        font-size: 1.5rem!important;
+      }
+      .btn-success.btn-lg {
+        font-size: 1.2rem!important;
+        padding: 1rem!important;
+      }
+    }
+    /* Back button styling */
+    .back-btn {
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 100;
+      border-bottom: 1px solid #dee2e6;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="container py-5">
+<!-- ✅ BACK BUTTON - Top lo sticky ga untadi -->
+<div class="back-btn p-3">
+  <a href="index.html" class="btn btn-outline-dark">
+    <i class="bi bi-arrow-left"></i> Back to Shop
+  </a>
+</div>
+
+<div class="container py-4">
   <h2 class="mb-4">🛒 Your Cart</h2>
 
   <div id="cart-items"></div>
 
-  <h4 class="mt-4">
-    Total: ₹<span id="total">0</span>
-  </h4>
+  <div class="border-top pt-3 mt-4">
+    <h4 class="d-flex justify-content-between">
+      <span>Total:</span>
+      <span>₹<span id="total">0</span></span>
+    </h4>
+  </div>
 
-  <button class="btn btn-dark mt-3 w-100" onclick="clearCart()">
+  <button class="btn btn-outline-dark mt-3 w-100 py-2" onclick="clearCart()">
     Clear Cart
   </button>
 </div>
@@ -32,7 +78,8 @@
 </div>
 
 <script>
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+// ✅ STEP 1: Page open avagane old cart load cheyi
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 /* =========================
    SAVE CART
@@ -45,56 +92,45 @@ function saveCart(){
    LOAD CART UI
 ========================= */
 function loadCart() {
-
   let container = document.getElementById("cart-items");
   container.innerHTML = "";
+  
   if(cart.length === 0){
     container.innerHTML = `
       <div class="text-center py-5">
         <h5>Your cart is empty 😕</h5>
-        <a href="index.html" class="btn btn-dark mt-3">Shop Now</a>
+        <a href="index.html" class="btn btn-dark mt-3 px-4 py-2">Shop Now</a>
       </div>
     `;
     document.getElementById("total").innerText = 0;
     return;
   }
 
-
-
-
   let grandTotal = 0;
 
   cart.forEach((item, index) => {
-
     let itemTotal = item.price * item.qty;
     grandTotal += itemTotal;
 
     container.innerHTML += `
-      <div class="border p-3 mb-3 d-flex justify-content-between align-items-center">
-
-        <div>
-          <h5>${item.name}</h5>
-          <p>Weight: ${item.weight}</p>
-
-          <p>
-            ₹${item.price} × ${item.qty} = <b>₹${itemTotal}</b>
-          </p>
-
-          <div class="d-flex align-items-center gap-2">
-
-            <button class="btn btn-sm btn-dark" onclick="decreaseQty(${index})">-</button>
-
-            <span class="fw-bold">${item.qty}</span>
-
-            <button class="btn btn-sm btn-dark" onclick="increaseQty(${index})">+</button>
-
+      <div class="cart-item border rounded p-3 mb-3 shadow-sm">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div>
+            <h5 class="mb-1">${item.name}</h5>
+            <p class="text-muted mb-1">Weight: ${item.weight}</p>
+            <p class="mb-0">₹${item.price} × ${item.qty} = <b class="text-success">₹${itemTotal}</b></p>
           </div>
+          <button class="btn btn-danger btn-sm" onclick="removeItem(${index})">
+            <i class="bi bi-trash"></i> Remove
+          </button>
         </div>
-
-        <button class="btn btn-danger btn-sm" onclick="removeItem(${index})">
-          Remove
-        </button>
-
+        
+        <div class="d-flex align-items-center gap-3 mt-3">
+          <span class="fw-bold">Qty:</span>
+          <button class="btn btn-dark btn-sm" onclick="decreaseQty(${index})">-</button>
+          <span class="fw-bold px-2">${item.qty}</span>
+          <button class="btn btn-dark btn-sm" onclick="increaseQty(${index})">+</button>
+        </div>
       </div>
     `;
   });
@@ -137,13 +173,15 @@ function removeItem(index){
    CLEAR CART
 ========================= */
 function clearCart(){
-  cart = [];
-  saveCart();
-  loadCart();
+  if(confirm("Are you sure you want to clear the cart?")){
+    cart = [];
+    saveCart();
+    loadCart();
+  }
 }
 
 /* =========================
-   WHATSAPP ORDER
+   WHATSAPP ORDER - UPDATED
 ========================= */
 function whatsappOrder() {
     if(cart.length === 0){
@@ -164,12 +202,21 @@ function whatsappOrder() {
     message += `\n-----------------\n`;
     message += `Name:\nAddress:\nPhone:\n`;
 
-    let phone = "919347333379"; // Nee WhatsApp number - correct ga ne undi
+    let phone = "919347333379";
 
-    // ✅ MAIN FIX - ee line marchu
     let url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
     window.open(url, "_blank");
+    
+    // ✅ Order pampaka cart complete ga clear cheyi
+    cart = []; 
+    localStorage.removeItem('cart');
+    loadCart();
+    
+    // ✅ 2 seconds tarvatha home ki redirect
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 2000);
 }
 
 /* INIT */
