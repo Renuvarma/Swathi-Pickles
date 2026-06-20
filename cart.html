@@ -25,7 +25,6 @@
       border-bottom: 1px solid #dee2e6;
     }
 .cart-summary { background: #f8f9fa; border-radius: 8px; }
-.free-ship-msg { color: #198754; font-size: 0.9rem; }
 .form-label { font-weight: 600; }
 .required::after { content: " *"; color: red; }
 .address-card {
@@ -48,6 +47,22 @@
       border-radius: 8px;
       padding: 12px;
    }
+.shipping-box {
+      background: #e7f3ff;
+      border: 2px dashed #0d6efd;
+      border-radius: 8px;
+      padding: 12px;
+   }
+.no-cod-badge {
+      background: #ffe5e5;
+      border: 1px solid #ff6b6b;
+      color: #c92a2a;
+      border-radius: 6px;
+      padding: 8px;
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 15px;
+   }
   </style>
 </head>
 
@@ -61,9 +76,15 @@
 
 <div class="container py-4">
   <h2 class="mb-4">🛒 Your Cart</h2>
+
+  <!-- NO COD NOTICE -->
+  <div class="no-cod-badge" id="codNotice">
+    <i class="bi bi-x-circle-fill"></i> No Cash on Delivery - Online Payment Only
+  </div>
+
   <div id="cart-items"></div>
 
-  <!-- SAVED ADDRESSES - CART EMPTY AYINA KANIPISTAI -->
+  <!-- SAVED ADDRESSES -->
   <div id="savedAddressesSection" class="mt-4 d-none">
     <div class="d-flex justify-content-between align-items-center mb-2">
       <h6 class="mb-0"><i class="bi bi-geo-alt-fill"></i> Saved Addresses</h6>
@@ -72,7 +93,7 @@
     <div id="savedAddressesList"></div>
   </div>
 
-  <!-- ADD NEW ADDRESS BUTTON - ALWAYS VISIBLE -->
+  <!-- ADD NEW ADDRESS BUTTON -->
   <div class="mt-3" id="addNewAddressWrapper">
     <button class="btn btn-primary w-100 py-2" onclick="showNewAddressForm()">
       <i class="bi bi-plus-circle-fill"></i> Add New Address
@@ -87,15 +108,15 @@
         <span>₹<span id="subtotal">0</span></span>
       </div>
       <div class="d-flex justify-content-between mb-2 summary-text">
-        <span>Delivery Charge:</span>
-        <span id="deliveryCharge">₹0</span>
+        <span>Shipping Charge:</span>
+        <span id="deliveryCharge" class="text-muted">Will be added after confirmation</span>
       </div>
-      <div id="freeShipMsg" class="text-center free-ship-msg mb-2"></div>
       <hr>
       <div class="d-flex justify-content-between">
         <h4><strong>Grand Total:</strong></h4>
         <h4><strong>₹<span id="grandTotal">0</span></strong></h4>
       </div>
+      <p class="text-muted small text-center mb-0 mt-2">*Shipping cost will be added to final total</p>
     </div>
 
     <div class="border p-3 mt-4 rounded" id="customerDetailsForm">
@@ -140,14 +161,6 @@
           <input type="text" class="form-control capitalize" id="custState" placeholder="State">
         </div>
         <div class="col-12">
-          <label class="form-label required">Payment Mode</label>
-          <select class="form-select" id="custPayment">
-            <option value="">Select Payment</option>
-            <option value="UPI">UPI</option>
-            <option value="Bank Transfer">Bank Transfer</option>
-          </select>
-        </div>
-        <div class="col-12">
           <div class="save-address-box">
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="saveAddress" checked>
@@ -166,6 +179,10 @@
       </div>
     </div>
 
+    <!-- SHIPPING QUOTE SECTION -->
+    <div class="shipping-box mt-4 d-none" id="shippingQuoteBox">
+    </div>
+
     <button class="btn btn-outline-dark mt-3 w-100 py-2" onclick="clearCart()">
       Clear Cart
     </button>
@@ -174,8 +191,11 @@
 
 <div id="whatsapp-btn-wrapper" class="container py-3 d-none">
   <div class="d-grid">
-    <button class="btn btn-success btn-lg" onclick="validateAndOrder()">
-      📲 Place Order on WhatsApp
+    <button class="btn btn-success btn-lg" id="mainOrderBtn" onclick="validateAndOrder()">
+      📲 Step 1: Place Order on WhatsApp
+    </button>
+    <button class="btn btn-primary btn-lg d-none" id="payNowBtn" onclick="startPayment()">
+      💳 Step 2: Pay Now
     </button>
   </div>
 </div>
@@ -211,6 +231,8 @@
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let orderModal;
 let selectedAddressId = null;
+let currentShipping = 0;
+let orderPlaced = false;
 
 function saveCart(){
   localStorage.setItem("cart", JSON.stringify(cart));
@@ -272,7 +294,6 @@ function loadSavedAddresses() {
     `;
   });
 
-  // ✅ FIX: Auto select ONLY on page load, NOT after Add New
   const isAddingNew = document.getElementById('formTitle').innerText === 'Add New Address';
   if (!selectedAddressId && addresses.length > 0 && cart.length > 0 &&!isAddingNew) {
     selectAddress(addresses[0].id);
@@ -293,7 +314,6 @@ function selectAddress(addressId) {
     document.getElementById('custCity').value = addr.city;
     document.getElementById('custState').value = addr.state;
     document.getElementById('custPincode').value = addr.pincode;
-    document.getElementById('custPayment').value = addr.payment;
     document.getElementById('editingAddressId').value = '';
     document.getElementById('saveAddress').checked = false;
     document.getElementById('formTitle').innerText = 'Customer Details';
@@ -304,10 +324,7 @@ function selectAddress(addressId) {
 }
 
 function showNewAddressForm() {
-  // Step 1: Deselect first
   selectedAddressId = null;
-
-  // Step 2: Clear all fields - FORCE EMPTY
   document.getElementById('custName').value = '';
   document.getElementById('custPhone').value = '';
   document.getElementById('custAltPhone').value = '';
@@ -316,17 +333,12 @@ function showNewAddressForm() {
   document.getElementById('custCity').value = '';
   document.getElementById('custState').value = '';
   document.getElementById('custPincode').value = '';
-  document.getElementById('custPayment').value = '';
   document.getElementById('editingAddressId').value = '';
   document.getElementById('saveAddress').checked = true;
   document.getElementById('formTitle').innerText = 'Add New Address';
   document.getElementById('editingBadge').classList.add('d-none');
   document.getElementById('cancelEditWrapper').classList.add('d-none');
-
-  // Step 3: Reload addresses with no selection
   loadSavedAddresses();
-
-  // Step 4: Focus
   setTimeout(() => {
     document.getElementById('custName').focus();
   }, 100);
@@ -346,7 +358,6 @@ function editAddress(addressId) {
     document.getElementById('custCity').value = addr.city;
     document.getElementById('custState').value = addr.state;
     document.getElementById('custPincode').value = addr.pincode;
-    document.getElementById('custPayment').value = addr.payment;
     document.getElementById('saveAddress').checked = true;
     document.getElementById('formTitle').innerText = 'Edit Address';
     document.getElementById('editingBadge').classList.remove('d-none');
@@ -411,11 +422,13 @@ function loadCart() {
     }
     summaryWrapper.classList.add('d-none');
     whatsappWrapper.classList.add('d-none');
+    document.getElementById('codNotice').style.display = 'none';
     return;
   }
 
   summaryWrapper.classList.remove('d-none');
   whatsappWrapper.classList.remove('d-none');
+  document.getElementById('codNotice').style.display = 'block';
 
   let subtotal = 0;
 
@@ -446,18 +459,24 @@ function loadCart() {
     `;
   });
 
-  let deliveryCharge = subtotal >= 2000? 0 : 100;
-  let grandTotal = subtotal + deliveryCharge;
+  let grandTotal = subtotal + currentShipping;
 
   document.getElementById("subtotal").innerText = subtotal;
-  document.getElementById("deliveryCharge").innerText = subtotal >= 2000? "Free 🎉" : `₹${deliveryCharge}`;
+  document.getElementById("deliveryCharge").innerText = currentShipping > 0? `₹${currentShipping}` : "Will be added after confirmation";
   document.getElementById("grandTotal").innerText = grandTotal;
 
-  if (subtotal < 2000 && subtotal > 0) {
-    document.getElementById("freeShipMsg").innerText = `💡 Add ₹${2000 - subtotal} more for FREE delivery!`;
-  } else {
-    document.getElementById("freeShipMsg").innerText = "";
-  }
+  // ✅ DISCOUNT MESSAGE TEESESINA - ENTHA BILL AYINA SHIPPING UNTADI
+}
+
+function updateShippingTotal() {
+  currentShipping = Number(document.getElementById('shippingInput').value) || 0;
+  let subtotal = 0;
+  cart.forEach(item => {
+    subtotal += item.price * item.qty;
+  });
+  let grandTotal = subtotal + currentShipping;
+  document.getElementById("deliveryCharge").innerText = currentShipping > 0? `₹${currentShipping}` : "Will be added after confirmation";
+  document.getElementById("grandTotal").innerText = grandTotal;
 }
 
 function increaseQty(index){
@@ -499,11 +518,10 @@ function validateAndOrder() {
     const city = document.getElementById('custCity').value.trim();
     const state = document.getElementById('custState').value.trim();
     const pincode = document.getElementById('custPincode').value.trim();
-    const payment = document.getElementById('custPayment').value;
     const shouldSave = document.getElementById('saveAddress').checked;
     const editingId = document.getElementById('editingAddressId').value;
 
-    if (!name ||!phone ||!address ||!city ||!state ||!pincode ||!payment) {
+    if (!name ||!phone ||!address ||!city ||!state ||!pincode) {
         alert('Please fill all required fields marked with *');
         return;
     }
@@ -521,14 +539,14 @@ function validateAndOrder() {
     if (shouldSave) {
       saveAddress({
         id: editingId || null,
-        name, phone, altPhone, address, landmark, city, state, pincode, payment
+        name, phone, altPhone, address, landmark, city, state, pincode, payment: 'Online'
       });
     }
 
-    whatsappOrder(name, phone, altPhone, address, landmark, city, state, pincode, payment);
+    whatsappOrder(name, phone, altPhone, address, landmark, city, state, pincode);
 }
 
-function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pincode, payment) {
+function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pincode) {
     if(cart.length === 0){
         alert("Your cart is empty!");
         return;
@@ -545,15 +563,11 @@ function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pi
         totalQty += item.qty;
     });
 
-    let deliveryCharge = subtotal >= 2000? 0 : 100;
-    let grandTotal = subtotal + deliveryCharge;
-
-    // ✅ SIMPLE CLEAN FORMAT - NO LINES
     let message = `Welcome To SWATHI PICKLES\n\n`;
-    
+
     message += `Order ID: ${orderId}\n`;
     message += `Date: ${orderDate}\n\n`;
-    
+
     message += `CUSTOMER DETAILS\n`;
     message += `Name: ${name}\n`;
     message += `Mobile: ${phone}\n`;
@@ -563,31 +577,28 @@ function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pi
     message += `City: ${city}\n`;
     message += `State: ${state}\n`;
     message += `Pincode: ${pincode}\n`;
-    message += `Payment: ${payment}\n\n`;
-    
+    message += `Payment: Online Payment Only\n\n`;
+
     message += `ORDER ITEMS\n`;
-    
+
     cart.forEach((item, index) => {
         let itemTotal = item.price * item.qty;
         message += `${index + 1}. ${item.name}\n`;
-        message += `   Weight: ${item.weight}\n`;
-        message += `   Qty: ${item.qty} x Rs.${item.price} = Rs.${itemTotal}\n\n`;
+        message += ` Weight: ${item.weight}\n`;
+        message += ` Qty: ${item.qty} x Rs.${item.price} = Rs.${itemTotal}\n\n`;
     });
-    
-    let deliveryText = subtotal >= 2000? "Free Delivery🎉" : `Rs.${deliveryCharge}`;
-    
+
     message += `BILL SUMMARY\n`;
     message += `Total Items: ${totalQty}\n`;
     message += `Subtotal: Rs.${subtotal}\n`;
-    message += `Delivery: ${deliveryText}\n`;
-    message += `Grand Total: Rs.${grandTotal}\n\n`;
-    
+    message += `Shipping: TBD (We will confirm shortly)\n\n`;
+
     message += `Thank You For Choosing Us!\n`;
-    message += `We will contact you shortly to confirm.\n`;
+    message += `We will contact you with shipping cost.\n`;
     message += `Delivery in 5-6 working days 🚚.\n\n`;
     message += `For queries: +91 9154289009`;
 
-    let waPhone = "919154289009";
+    let waPhone = "919154289009"; // Nee WhatsApp number ikkada pettu
     let encodedMsg = encodeURIComponent(message);
 
     let url;
@@ -599,6 +610,55 @@ function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pi
 
     localStorage.setItem('pendingOrder', 'true');
     window.open(url, "_blank");
+
+    // ✅ POPUP LEKUNDA, PAGE LO MESSAGE + STEP 2 CHUPISTHUNDI
+    orderPlaced = true;
+    document.getElementById('shippingQuoteBox').classList.remove('d-none');
+    document.getElementById('shippingQuoteBox').innerHTML = `
+      <div class="alert alert-success mb-2">
+        <i class="bi bi-check-circle-fill"></i> <strong>Order sent to WhatsApp!</strong><br>
+        <small>Memu 5 mins lo shipping cost cheptham. Kindha amount enter chesi pay cheyyandi.</small>
+      </div>
+      <h6 class="mb-2"><i class="bi bi-truck"></i> Step 2: Enter Shipping Cost</h6>
+      <div class="input-group">
+        <span class="input-group-text">₹</span>
+        <input type="number" class="form-control" id="shippingInput" placeholder="Memu cheppina amount" oninput="updateShippingTotal()">
+      </div>
+    `;
+    document.getElementById('mainOrderBtn').classList.add('d-none');
+    document.getElementById('payNowBtn').classList.remove('d-none');
+}
+
+function startPayment() {
+    if(currentShipping === 0) {
+        alert("Memu cheppina shipping amount enter cheyyandi first!");
+        return;
+    }
+
+    let subtotal = 0;
+    cart.forEach(item => {
+        subtotal += item.price * item.qty;
+    });
+    let grandTotal = subtotal + currentShipping;
+
+    alert(`Razorpay Payment for ₹${grandTotal} start avuthundi.\n\nIkkada Razorpay integration code add cheyyali.\nKey: rzp_live_xxxxx\nAmount: ${grandTotal * 100} paise`);
+
+    // Razorpay Code Ikkada Add Cheyyali
+    /*
+    var options = {
+        "key": "rzp_live_xxxxx", // Nee Razorpay Key
+        "amount": grandTotal * 100,
+        "currency": "INR",
+        "name": "Swathi Pickles",
+        "description": "Order Payment",
+        "handler": function (response){
+            alert("Payment Success! ID: " + response.razorpay_payment_id);
+            confirmOrderSent();
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+    */
 }
 
 function checkPendingOrder() {
