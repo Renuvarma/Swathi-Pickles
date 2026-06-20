@@ -13,7 +13,7 @@
 .cart-item p { font-size: 1rem!important; }
 .cart-item.btn-sm { padding: 0.5rem 0.8rem!important; font-size: 1rem!important; }
 .cart-item.fw-bold { font-size: 1.1rem!important; }
-.summary-text { font-size: 1.1rem!important; }
+.summary-text { font-size: 1rem!important; }
       #grandTotal { font-size: 1.5rem!important; }
 .btn-success.btn-lg { font-size: 1.2rem!important; padding: 1rem!important; }
     }
@@ -47,12 +47,6 @@
       border-radius: 8px;
       padding: 12px;
    }
-.shipping-box {
-      background: #e7f3ff;
-      border: 2px dashed #0d6efd;
-      border-radius: 8px;
-      padding: 12px;
-   }
 .no-cod-badge {
       background: #ffe5e5;
       border: 1px solid #ff6b6b;
@@ -62,6 +56,18 @@
       text-align: center;
       font-weight: 600;
       margin-bottom: 15px;
+   }
+ .shipping-pending {
+      color: #fd7e14;
+      font-weight: 600;
+      max-width: 60%;
+   }
+   @media (max-width: 768px) {
+    .shipping-pending {
+         font-size: 0.85rem;
+         text-align: right;
+         max-width: 55%;
+      }
    }
   </style>
 </head>
@@ -107,9 +113,9 @@
         <span>Subtotal:</span>
         <span>₹<span id="subtotal">0</span></span>
       </div>
-      <div class="d-flex justify-content-between mb-2 summary-text">
+      <div class="d-flex justify-content-between mb-2 summary-text align-items-start">
         <span>Shipping Charge:</span>
-        <span id="deliveryCharge" class="text-muted">Will be added after confirmation</span>
+        <span id="deliveryCharge" class="text-end shipping-pending">Will be added after confirmation</span>
       </div>
       <hr>
       <div class="d-flex justify-content-between">
@@ -179,10 +185,6 @@
       </div>
     </div>
 
-    <!-- SHIPPING QUOTE SECTION -->
-    <div class="shipping-box mt-4 d-none" id="shippingQuoteBox">
-    </div>
-
     <button class="btn btn-outline-dark mt-3 w-100 py-2" onclick="clearCart()">
       Clear Cart
     </button>
@@ -192,10 +194,7 @@
 <div id="whatsapp-btn-wrapper" class="container py-3 d-none">
   <div class="d-grid">
     <button class="btn btn-success btn-lg" id="mainOrderBtn" onclick="validateAndOrder()">
-      📲 Step 1: Place Order on WhatsApp
-    </button>
-    <button class="btn btn-primary btn-lg d-none" id="payNowBtn" onclick="startPayment()">
-      💳 Step 2: Pay Now
+      📲 Place Order on WhatsApp
     </button>
   </div>
 </div>
@@ -232,7 +231,6 @@ let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let orderModal;
 let selectedAddressId = null;
 let currentShipping = 0;
-let orderPlaced = false;
 
 function saveCart(){
   localStorage.setItem("cart", JSON.stringify(cart));
@@ -462,20 +460,17 @@ function loadCart() {
   let grandTotal = subtotal + currentShipping;
 
   document.getElementById("subtotal").innerText = subtotal;
-  document.getElementById("deliveryCharge").innerText = currentShipping > 0? `₹${currentShipping}` : "Will be added after confirmation";
-  document.getElementById("grandTotal").innerText = grandTotal;
 
-  // ✅ DISCOUNT MESSAGE TEESESINA - ENTHA BILL AYINA SHIPPING UNTADI
-}
+  const deliveryEl = document.getElementById("deliveryCharge");
+  if(currentShipping > 0) {
+    deliveryEl.innerText = `₹${currentShipping}`;
+    deliveryEl.classList.remove('shipping-pending');
+    deliveryEl.style.color = '';
+  } else {
+    deliveryEl.innerText = "Will be added after confirmation";
+    deliveryEl.classList.add('shipping-pending');
+  }
 
-function updateShippingTotal() {
-  currentShipping = Number(document.getElementById('shippingInput').value) || 0;
-  let subtotal = 0;
-  cart.forEach(item => {
-    subtotal += item.price * item.qty;
-  });
-  let grandTotal = subtotal + currentShipping;
-  document.getElementById("deliveryCharge").innerText = currentShipping > 0? `₹${currentShipping}` : "Will be added after confirmation";
   document.getElementById("grandTotal").innerText = grandTotal;
 }
 
@@ -598,7 +593,7 @@ function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pi
     message += `Delivery in 5-6 working days 🚚.\n\n`;
     message += `For queries: +91 9154289009`;
 
-    let waPhone = "919154289009"; // Nee WhatsApp number ikkada pettu
+    let waPhone = "919154289009";
     let encodedMsg = encodeURIComponent(message);
 
     let url;
@@ -611,54 +606,7 @@ function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pi
     localStorage.setItem('pendingOrder', 'true');
     window.open(url, "_blank");
 
-    // ✅ POPUP LEKUNDA, PAGE LO MESSAGE + STEP 2 CHUPISTHUNDI
-    orderPlaced = true;
-    document.getElementById('shippingQuoteBox').classList.remove('d-none');
-    document.getElementById('shippingQuoteBox').innerHTML = `
-      <div class="alert alert-success mb-2">
-        <i class="bi bi-check-circle-fill"></i> <strong>Order sent to WhatsApp!</strong><br>
-        <small>Memu 5 mins lo shipping cost cheptham. Kindha amount enter chesi pay cheyyandi.</small>
-      </div>
-      <h6 class="mb-2"><i class="bi bi-truck"></i> Step 2: Enter Shipping Cost</h6>
-      <div class="input-group">
-        <span class="input-group-text">₹</span>
-        <input type="number" class="form-control" id="shippingInput" placeholder="Memu cheppina amount" oninput="updateShippingTotal()">
-      </div>
-    `;
-    document.getElementById('mainOrderBtn').classList.add('d-none');
-    document.getElementById('payNowBtn').classList.remove('d-none');
-}
-
-function startPayment() {
-    if(currentShipping === 0) {
-        alert("Memu cheppina shipping amount enter cheyyandi first!");
-        return;
-    }
-
-    let subtotal = 0;
-    cart.forEach(item => {
-        subtotal += item.price * item.qty;
-    });
-    let grandTotal = subtotal + currentShipping;
-
-    alert(`Razorpay Payment for ₹${grandTotal} start avuthundi.\n\nIkkada Razorpay integration code add cheyyali.\nKey: rzp_live_xxxxx\nAmount: ${grandTotal * 100} paise`);
-
-    // Razorpay Code Ikkada Add Cheyyali
-    /*
-    var options = {
-        "key": "rzp_live_xxxxx", // Nee Razorpay Key
-        "amount": grandTotal * 100,
-        "currency": "INR",
-        "name": "Swathi Pickles",
-        "description": "Order Payment",
-        "handler": function (response){
-            alert("Payment Success! ID: " + response.razorpay_payment_id);
-            confirmOrderSent();
-        }
-    };
-    var rzp1 = new Razorpay(options);
-    rzp1.open();
-    */
+    // ✅ DOTTED BOX + PAY NOW TEESINA - CUSTOMER WHATSAPP NUNCHI VELLIPOTHADU
 }
 
 function checkPendingOrder() {
