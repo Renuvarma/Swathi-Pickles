@@ -13,51 +13,94 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
 
-    <style>
-        html {
-            scroll-behavior: smooth;
-        }
-        #veg-pickles, #nonveg-pickles {
-            scroll-margin-top: 120px;
-        }
+   <style>
+    html {
+        scroll-behavior: smooth;
+    }
+    #veg-pickles, #nonveg-pickles {
+        scroll-margin-top: 120px;
+    }
 
-        /* Navbar Alignment Fix */
+    /* Navbar Alignment Fix */
     .navbar-brand {
-            font-size: 1.1rem;
-            white-space: nowrap;
-            font-weight: 700;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+        font-size: 1.1rem;
+        white-space: nowrap;
+        font-weight: 700;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
     .navbar-brand.show {
-            opacity: 1;
-        }
+        opacity: 1;
+    }
 
-        /* Desktop */
-        @media (min-width: 992px) {
-       .navbar.btn-outline-dark {
-                padding: 0.5rem 1.2rem;
-                font-size: 1rem;
-            }
-       .navbar-nav {
-                gap: 2rem;
-            }
-       .nav-link {
-                font-weight: 500;
-                font-size: 1rem;
-            }
+    /* Desktop */
+    @media (min-width: 992px) {
+   .navbar.btn-outline-dark {
+            padding: 0.5rem 1.2rem;
+            font-size: 1rem;
         }
+   .navbar-nav {
+            gap: 2rem;
+        }
+   .nav-link {
+            font-weight: 500;
+            font-size: 1rem;
+        }
+    }
 
-        /* Mobile */
-        @media (max-width: 991px) {
-       .navbar-brand {
-                font-size: 0.95rem!important;
-            }
-       .navbar-toggler {
-                padding: 0.25rem 0.5rem;
-            }
+    /* Mobile */
+    @media (max-width: 991px) {
+   .navbar-brand {
+            font-size: 0.95rem!important;
         }
-    </style>
+   .navbar-toggler {
+            padding: 0.25rem 0.5rem;
+        }
+    }
+
+    /* Filter Buttons */
+    .filter-btn {
+        transition: all 0.3s ease;
+    }
+    .filter-btn.active {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .product-card {
+        transition: all 0.3s ease;
+    }
+    .product-card.hidden {
+        display: none !important;
+    }
+
+    .nav-link.active {
+        font-weight: 600 !important;
+        color: #000 !important;
+    }
+    
+    /* NAV LINK FLEX ALIGNMENT */
+    .nav-link {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px;
+    }
+    
+    /* DOT ICONS - PERFECT CENTER */
+    .nav-link .bi-circle-fill {
+        width: 10px !important;
+        height: 10px !important;
+        font-size: 10px !important;
+        line-height: 1;
+        flex-shrink: 0;
+    }
+
+    .nav-link.active .bi-circle-fill {
+        width: 12px !important;
+        height: 12px !important;
+        font-size: 12px !important;
+        filter: drop-shadow(0 0 4px currentColor);
+    }
+</style>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -88,15 +131,19 @@
                 <!-- Collapsible Menu - Desktop lo horizontal, Mobile lo dropdown -->
                 <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
                     <ul class="navbar-nav mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="index.html">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#veg-pickles">Veg Pickles</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#nonveg-pickles">Non-Veg Pickles</a>
-                        </li>
+<li class="nav-item">
+    <a class="nav-link active" id="navAll" href="#" onclick="filterProducts('all'); return false;">Home</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" id="navVeg" href="#" onclick="filterProducts('veg'); return false;">
+        <i class="bi bi-circle-fill text-success" style="font-size: 0.6rem;"></i> Veg Pickles
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" id="navNonVeg" href="#" onclick="filterProducts('nonveg'); return false;">
+        <i class="bi bi-circle-fill text-danger" style="font-size: 0.6rem;"></i> Non-Veg Pickles
+    </a>
+</li>
                     </ul>
                 </div>
             </div>
@@ -116,10 +163,15 @@
             </div>
         </header>
 
+
+
+
+
+
        <!-- Veg Pickles Section -->
-        <section class="py-5" id="veg-pickles">
+        <section class="py-5 veg-section" id="veg-pickles">
             <div class="container px-4 px-lg-5 mt-5">
-                <h2 class="fw-bolder mb-4 text-center">
+                <h2 class="fw-bolder mb-4 text-center veg-heading" >
                     <i class="bi bi-flower1 me-2"></i>Veg Pickles
                 </h2>
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
@@ -128,7 +180,7 @@
 
 
                      <!-- Mango Pickle -->
-                     <div class="col mb-5">
+                     <div class="col mb-5 product-card" data-category="veg">
                         <div class="card h-100" data-product="Mango Pickle">
                             <img class="card-img-top" src="mango.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Mango Pickle" />
                             <div class="card-body p-4 text-center">
@@ -160,7 +212,7 @@
 
 
                      <!--Tomato Pickle-->
-                     <div class="col mb-5">
+                     <div class="col mb-5 product-card" data-category="veg">
                         <div class="card h-100" data-product="Tomato Pickle">
                             <img class="card-img-top" src="tomato.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Tomato Pickle" />
                             <div class="card-body p-4 text-center">
@@ -189,7 +241,7 @@
                     
 
                      <!-- Gongura Pickle -->
-                     <div class="col mb-5">
+                    <div class="col mb-5 product-card" data-category="veg">
                         <div class="card h-100" data-product="Gongura Pickle">
                             <img class="card-img-top" src="gongura.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Gongura Pickle" />
                             <div class="card-body p-4 text-center">
@@ -219,7 +271,7 @@
                     
 
                      <!-- Magaya Pickle -->
-                     <div class="col mb-5">
+                     <div class="col mb-5 product-card" data-category="veg">
                         <div class="card h-100" data-product="Magaya Pickle">
                             <img class="card-img-top" src="magaya.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Magaya Pickle" />
                             <div class="card-body p-4 text-center">
@@ -250,7 +302,7 @@
 
 
                      <!-- Chintakay Pickle -->
-                     <div class="col mb-5">
+                     <div class="col mb-5 product-card" data-category="veg">
                         <div class="card h-100" data-product="Chintakay Pickle">
                             <img class="card-img-top" src="tamrind.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Chintakay Pickle" />
                             <div class="card-body p-4 text-center">
@@ -279,7 +331,7 @@
                     
 
                      <!-- Drumstick Pickle -->
-                     <div class="col mb-5">
+                     <div class="col mb-5 product-card" data-category="veg">
                         <div class="card h-100" data-product="Drumstick Pickle">
                             <img class="card-img-top" src="drumstick.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Drumstick Pickle" />
                             <div class="card-body p-4 text-center">
@@ -308,7 +360,7 @@
                     
 
                      <!-- Kakarakaya Pickle -->
-                     <div class="col mb-5">
+                     <div class="col mb-5 product-card" data-category="veg">
                         <div class="card h-100" data-product="Kakarakaya Pickle">
                             <img class="card-img-top" src="kakarkay.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Kakarakaya Pickle" />
                             <div class="card-body p-4 text-center">
@@ -336,7 +388,7 @@
                     
                     
                      <!-- Chilli Pickle -->
-                     <div class="col mb-5">
+                     <div class="col mb-5 product-card" data-category="veg">
                         <div class="card h-100" data-product="Pandu Mirchi Pickle">
                             <img class="card-img-top" src="chilli.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Pandu Mirchi Pickle" />
                             <div class="card-body p-4 text-center">
@@ -364,7 +416,7 @@
 
 
                      <!-- Beans Pickle -->
-                     <div class="col mb-5">
+                     <div class="col mb-5 product-card" data-category="veg">
                         <div class="card h-100" data-product="Beans Pickle">
                             <img class="card-img-top" src="beans.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Beans Pickle" />
                             <div class="card-body p-4 text-center">
@@ -393,7 +445,7 @@
 
 
                      <!-- Dondakaya Pickle -->
-                     <div class="col mb-5">
+                    <div class="col mb-5 product-card" data-category="veg">
                         <div class="card h-100" data-product="Dondakaya Pickle">
                             <img class="card-img-top" src="dondakay.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Dondakaya Pickle" />
                             <div class="card-body p-4 text-center">
@@ -422,7 +474,7 @@
                     
 
                      <!-- Amla Pickle -->
-                     <div class="col mb-5">
+                     <div class="col mb-5 product-card" data-category="veg">
                         <div class="card h-100" data-product="Amla Pickle">
                             <img class="card-img-top" src="amla.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="amla Pickle" />
                             <div class="card-body p-4 text-center">
@@ -452,7 +504,7 @@
 
 
                     <!-- Ginger Pickle -->
-                    <div class="col mb-5">
+                    <div class="col mb-5 product-card" data-category="veg">
                         <div class="card h-100" data-product="Ginger Pickle">
                             <img class="card-img-top" src="ginger.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Ginger Pickle" />
                             <div class="card-body p-4 text-center">
@@ -481,7 +533,7 @@
 
 
                     <!-- Cauliflower Pickle -->
-                    <div class="col mb-5">
+                    <div class="col mb-5 product-card" data-category="veg">
                         <div class="card h-100" data-product="Cauliflower Pickle">
                             <img class="card-img-top" src="cauliflower.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Cauliflower Pickle" />
                             <div class="card-body p-4 text-center">
@@ -511,7 +563,7 @@
 
 
                     <!-- Lemon Pickle -->
-                    <div class="col mb-5">
+                    <div class="col mb-5 product-card" data-category="veg">
                         <div class="card h-100" data-product="Lemon Pickle">
                             <img class="card-img-top" src="lemon.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Lemon Pickle" />
                             <div class="card-body p-4 text-center">
@@ -546,15 +598,15 @@
 
 
         <!-- Non-Veg Pickles Section -->
-        <section class="py-5 bg-light" id="nonveg-pickles">
+        <section class="py-5 bg-light nonveg-section" id="nonveg-pickles">
             <div class="container px-4 px-lg-5 mt-5">
-                <h2 class="fw-bolder mb-4 text-center">
+                <h2 class="fw-bolder mb-4 text-center non-veg heading">
                     <i class="bi bi-egg-fried me-2"></i>Non-Veg Pickles
                 </h2>
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
                     <!-- Chicken Bone Pickle -->
-                    <div class="col mb-5">
+                    <div class="col mb-5 product-card" data-category="nonveg">
                         <div class="card h-100" data-product="Chicken Bone Pickle">
                             <img class="card-img-top" src="chicken bone.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Chicken Bone Pickle" />
                             <div class="card-body p-4 text-center">
@@ -582,7 +634,7 @@
 
 
                     <!-- Chicken Boneless Pickle -->
-                    <div class="col mb-5">
+                    <div class="col mb-5 product-card" data-category="nonveg">
                         <div class="card h-100" data-product="Chicken Boneless Pickle">
                             <img class="card-img-top" src="chicken boneless.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Chicken Boneless Pickle" />
                             <div class="card-body p-4 text-center">
@@ -611,7 +663,7 @@
 
 
                     <!-- Gongura Chicken Pickle -->
-                    <div class="col mb-5">
+                   <div class="col mb-5 product-card" data-category="nonveg">
                         <div class="card h-100" data-product="Gongura Chicken Pickle">
                             <img class="card-img-top" src="gongura chicken.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Gongura Chicken Pickle" />
                             <div class="card-body p-4 text-center">
@@ -640,7 +692,7 @@
                     
 
                     <!-- Prawns Pickle -->
-                    <div class="col mb-5">
+                    <div class="col mb-5 product-card" data-category="nonveg">
                         <div class="card h-100" data-product="Prawns Pickle">
                             <img class="card-img-top" src="prawns.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Prawns Pickle" />
                             <div class="card-body p-4 text-center">
@@ -669,7 +721,7 @@
                     
 
                     <!-- Small Prawns Pickle -->
-                    <div class="col mb-5">
+                    <div class="col mb-5 product-card" data-category="nonveg">
                         <div class="card h-100" data-product="Small Prawns Pickle">
                             <img class="card-img-top" src="small prawn.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Small Prawns Pickle" />
                             <div class="card-body p-4 text-center">
@@ -698,7 +750,7 @@
                     
 
                     <!-- Gongura Prawns Pickle -->
-                    <div class="col mb-5">
+                    <div class="col mb-5 product-card" data-category="nonveg">
                         <div class="card h-100" data-product="Gongura Prawns Pickle">
                             <img class="card-img-top" src="gongura prawns.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Gongura Prawns Pickle" />
                             <div class="card-body p-4 text-center">
@@ -727,7 +779,7 @@
                     
 
                     <!-- Mutton Bone Pickle -->
-                    <div class="col mb-5">
+                   <div class="col mb-5 product-card" data-category="nonveg">
                         <div class="card h-100" data-product="Mutton Bone Pickle">
                             <img class="card-img-top" src="mutton.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Mutton Bone Pickle" />
                             <div class="card-body p-4 text-center">
@@ -757,7 +809,7 @@
 
 
                     <!-- Mutton Boneless Pickle -->
-                    <div class="col mb-5">
+                    <div class="col mb-5 product-card" data-category="nonveg">
                         <div class="card h-100" data-product="Mutton Boneless Pickle">
                             <img class="card-img-top" src="boneless mutton.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Mutton Boneless Pickle" />
                             <div class="card-body p-4 text-center">
@@ -786,7 +838,7 @@
 
 
                     <!-- Gongura Mutton Pickle -->
-                    <div class="col mb-5">
+                    <div class="col mb-5 product-card" data-category="nonveg">
                         <div class="card h-100" data-product="Gongura Mutton Pickle">
                             <img class="card-img-top" src="gongura mutton.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Gongura Mutton Pickle" />
                             <div class="card-body p-4 text-center">
@@ -813,7 +865,7 @@
                     </div>
 
                     <!-- Fish Pickle -->
-                    <div class="col mb-5">
+                    <div class="col mb-5 product-card" data-category="nonveg">
                         <div class="card h-100" data-product="Fish Pickle">
                             <img class="card-img-top" src="fish.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Fish Pickle" />
                             <div class="card-body p-4 text-center">
@@ -841,7 +893,7 @@
 
 
                     <!-- Korameenu Fish Pickle -->
-                    <div class="col mb-5">
+                    <div class="col mb-5 product-card" data-category="nonveg">
                         <div class="card h-100" data-product="Korameenu Fish Pickle">
                             <img class="card-img-top" src="koramenu fish.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Korameenu Fish Pickle" />
                             <div class="card-body p-4 text-center">
@@ -868,7 +920,7 @@
                     </div>
 
                     <!-- Crab Pickle -->
-                    <div class="col mb-5">
+                    <div class="col mb-5 product-card" data-category="nonveg">
                         <div class="card h-100" data-product="Crab Pickle">
                             <img class="card-img-top" src="crab.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Crab Pickle" />
                             <div class="card-body p-4 text-center">
@@ -925,6 +977,67 @@
         <script>
         // ✅ STEP 1: Cart load cheyi localStorage nunchi
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+
+
+/* =========================
+   FILTER PRODUCTS - UPDATED
+========================= */
+function filterProducts(category) {
+  const allProducts = document.querySelectorAll('.product-card');
+  const vegSection = document.querySelector('.veg-section');
+  const nonvegSection = document.querySelector('.nonveg-section');
+  
+  // Nav links
+  const navAll = document.getElementById('navAll');
+  const navVeg = document.getElementById('navVeg');
+  const navNonVeg = document.getElementById('navNonVeg');
+
+  // Reset nav active states
+  document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+
+  if (category === 'all') {
+    // Show both sections
+    vegSection.style.display = 'block';
+    nonvegSection.style.display = 'block';
+    allProducts.forEach(product => product.classList.remove('hidden'));
+    navAll.classList.add('active');
+  }
+  else if (category === 'veg') {
+    // Show only Veg section, hide Non-Veg section
+    vegSection.style.display = 'block';
+    nonvegSection.style.display = 'none';
+    allProducts.forEach(product => {
+      if (product.getAttribute('data-category') === 'veg') {
+        product.classList.remove('hidden');
+      } else {
+        product.classList.add('hidden');
+      }
+    });
+    navVeg.classList.add('active');
+  }
+  else if (category === 'nonveg') {
+    // Show only Non-Veg section, hide Veg section
+    vegSection.style.display = 'none';
+    nonvegSection.style.display = 'block';
+    allProducts.forEach(product => {
+      if (product.getAttribute('data-category') === 'nonveg') {
+        product.classList.remove('hidden');
+      } else {
+        product.classList.add('hidden');
+      }
+    });
+    navNonVeg.classList.add('active');
+  }
+
+  // Scroll to top of products
+  document.getElementById('veg-pickles').scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+
+// Page load ayyaka default ga All chupinchali
+document.addEventListener('DOMContentLoaded', function() {
+  filterProducts('all');
+});
 
         /* =========================
            SAVE CART TO LOCALSTORAGE
