@@ -5,9 +5,8 @@ let cart = [];
 ========================= */
 function initCart() {
     let saved = localStorage.getItem("cart");
-
     try {
-        cart = saved ? JSON.parse(saved) : [];
+        cart = saved? JSON.parse(saved) : [];
     } catch {
         cart = [];
     }
@@ -21,60 +20,72 @@ function saveCart() {
 }
 
 /* =========================
-   FIND ITEM (KEY FIX)
+   FIND ITEM - Uses exact weight match
 ========================= */
 function findItem(product, weight) {
     return cart.find(i => i.name === product && i.weight === weight);
 }
 
 /* =========================
-   GET WEIGHT (FIXED)
+   GET WEIGHT - FIXED: Uses data-weight
 ========================= */
 function getWeight(card) {
     let active = card.querySelector(".btn-outline-secondary.active");
-    return active ? active.innerText : "1/2 Kg";
+    return active? active.dataset.weight : "1/2 Kg";
 }
 
 /* =========================
-   SELECT WEIGHT (FIXED RESET BUG)
+   SELECT WEIGHT - FINAL WORKING
 ========================= */
 function selectWeight(btn, price) {
-
     let card = btn.closest(".card");
+    let product = card.dataset.product;
 
-    card.querySelectorAll(".btn-outline-secondary")
-        .forEach(b => b.classList.remove("active"));
-
+    // 1. Active class update
+    card.querySelectorAll(".btn-outline-secondary").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
+    // 2. Price update
     card.querySelector(".price").innerText = price;
 
-    // reset UI correctly
+    // 3. FIX: data-weight nundi direct teesko. innerText vaddu.
+    let weight = btn.dataset.weight;
+    let item = findItem(product, weight);
+
     let box = card.querySelector(".cart-box");
-    box.querySelector(".add-btn").classList.remove("d-none");
-    box.querySelector(".qty-box").classList.add("d-none");
-    box.querySelector(".qty").innerText = 1;
+    let addBtn = box.querySelector(".add-btn");
+    let qtyBox = box.querySelector(".qty-box");
+    let qtySpan = box.querySelector(".qty");
+
+    if (item && item.qty > 0) {
+        // Ee weight ki already cart lo unte + - show
+        addBtn.classList.add("d-none");
+        qtyBox.classList.remove("d-none");
+        qtySpan.innerText = item.qty;
+    } else {
+        // Ee weight ki leka pothe Add To Cart show
+        addBtn.classList.remove("d-none");
+        qtyBox.classList.add("d-none");
+        qtySpan.innerText = 1;
+    }
 }
 
 /* =========================
-   ADD TO CART (FIXED)
+   ADD TO CART
 ========================= */
 function addToCart(product, btn) {
-
     let card = btn.closest(".card");
-
     let price = parseInt(card.querySelector(".price").innerText);
-    let weight = getWeight(card);
+    let weight = getWeight(card); // Ippudu data-weight nundi vastadi
 
     let item = findItem(product, weight);
 
     if (!item) {
-        item = { name: product, weight, price, qty: 0 };
+        item = { name: product, weight: weight, price: price, qty: 0 };
         cart.push(item);
     }
 
     item.qty++;
-
     saveCart();
     updateUI();
 }
@@ -83,18 +94,14 @@ function addToCart(product, btn) {
    CARD +
 ========================= */
 function increaseQtyCard(btn) {
-
     let card = btn.closest(".card");
-
     let product = card.dataset.product;
     let weight = getWeight(card);
 
     let item = findItem(product, weight);
-
     if (!item) return;
 
     item.qty++;
-
     saveCart();
     updateUI();
 }
@@ -103,14 +110,11 @@ function increaseQtyCard(btn) {
    CARD -
 ========================= */
 function decreaseQtyCard(btn) {
-
     let card = btn.closest(".card");
-
     let product = card.dataset.product;
     let weight = getWeight(card);
 
     let index = cart.findIndex(i => i.name === product && i.weight === weight);
-
     if (index === -1) return;
 
     cart[index].qty--;
@@ -127,15 +131,20 @@ function decreaseQtyCard(btn) {
    CART RENDER
 ========================= */
 function renderCart() {
-
     let box = document.getElementById("cart-items");
     if (!box) return;
 
     let total = 0;
     let html = "";
 
-    cart.forEach((item, i) => {
+    if (cart.length === 0) {
+        box.innerHTML = '<p class="text-center text-muted">Your cart is empty</p>';
+        let t = document.getElementById("total");
+        if (t) t.innerText = 0;
+        return;
+    }
 
+    cart.forEach((item, i) => {
         let sum = item.price * item.qty;
         total += sum;
 
@@ -146,7 +155,6 @@ function renderCart() {
                 <p>${item.weight}</p>
                 <p>₹${item.price} × ${item.qty} = <b>₹${sum}</b></p>
             </div>
-
             <div>
                 <button class="btn btn-dark btn-sm" onclick="cartMinus(${i})">-</button>
                 <span class="mx-2">${item.qty}</span>
@@ -156,7 +164,6 @@ function renderCart() {
     });
 
     box.innerHTML = html;
-
     let t = document.getElementById("total");
     if (t) t.innerText = total;
 }
@@ -183,21 +190,20 @@ function cartMinus(i) {
 function updateBadge() {
     let badge = document.getElementById("cart-count");
     if (!badge) return;
-
     let count = cart.reduce((s, i) => s + i.qty, 0);
     badge.innerText = count;
+    badge.style.display = count > 0? 'inline-block' : 'none';
 }
 
 /* =========================
    PRODUCT UI SYNC
 ========================= */
 function syncUI() {
-
     document.querySelectorAll(".card").forEach(card => {
-
         let product = card.dataset.product;
-        let weight = getWeight(card);
+        if (!product) return;
 
+        let weight = getWeight(card);
         let item = findItem(product, weight);
 
         let box = card.querySelector(".cart-box");
@@ -232,24 +238,26 @@ function updateUI() {
    WHATSAPP ORDER
 ========================= */
 function whatsappOrder() {
+    if (cart.length === 0) {
+        alert("Cart is empty!");
+        return;
+    }
 
-    let msg = "🛒 Order Details:\n\n";
+    let msg = "🛒 *Swathi Pickles Order* 🛒\n\n";
     let total = 0;
 
     cart.forEach(i => {
         let sum = i.price * i.qty;
         total += sum;
-
-        msg += `${i.name} (${i.weight}) x ${i.qty} = ₹${sum}\n`;
+        msg += `*${i.name}* (${i.weight}) x ${i.qty} = ₹${sum}\n`;
     });
 
-    msg += `\n💰 Total: ₹${total}\n`;
-    msg += "\nName:\nAddress:\nPhone:\n";
+    msg += `\n💰 *Total: ₹${total}*\n\n`;
+    msg += "Please confirm order:\n";
+    msg += "Name: \nAddress: \nPhone: \n";
 
-    let phone = "91XXXXXXXXXX"; // change your number
-
+    let phone = "917981460555";
     let url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
-
     window.open(url, "_blank");
 }
 
