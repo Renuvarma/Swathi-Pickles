@@ -132,16 +132,16 @@
                 <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
                     <ul class="navbar-nav mb-2 mb-lg-0">
 <li class="nav-item">
-    <a class="nav-link active" id="navAll" href="#" onclick="filterProducts('all'); return false;">Home</a>
+    <a class="nav-link active" id="navAll" href="javascript:void(0)" onclick="filterProducts('all')">Home</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" id="navVeg" href="#" onclick="filterProducts('veg'); return false;">
-        <i class="bi bi-circle-fill text-success" style="font-size: 0.6rem;"></i> Veg Pickles
+    <a class="nav-link" id="navVeg" href="javascript:void(0)" onclick="filterProducts('veg')">
+        <i class="bi bi-circle-fill text-success"></i> Veg Pickles
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" id="navNonVeg" href="#" onclick="filterProducts('nonveg'); return false;">
-        <i class="bi bi-circle-fill text-danger" style="font-size: 0.6rem;"></i> Non-Veg Pickles
+    <a class="nav-link" id="navNonVeg" href="javascript:void(0)" onclick="filterProducts('nonveg')">
+        <i class="bi bi-circle-fill text-danger"></i> Non-Veg Pickles
     </a>
 </li>
                     </ul>
@@ -981,7 +981,7 @@
 
 
 /* =========================
-   FILTER PRODUCTS - UPDATED
+   FILTER PRODUCTS - FINAL FIX
 ========================= */
 function filterProducts(category) {
   const allProducts = document.querySelectorAll('.product-card');
@@ -1002,6 +1002,8 @@ function filterProducts(category) {
     nonvegSection.style.display = 'block';
     allProducts.forEach(product => product.classList.remove('hidden'));
     navAll.classList.add('active');
+    // Top banner ki scroll
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   else if (category === 'veg') {
     // Show only Veg section, hide Non-Veg section
@@ -1015,6 +1017,10 @@ function filterProducts(category) {
       }
     });
     navVeg.classList.add('active');
+    // Veg section top ki scroll - delay tho
+    setTimeout(() => {
+      vegSection.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }, 100);
   }
   else if (category === 'nonveg') {
     // Show only Non-Veg section, hide Veg section
@@ -1028,16 +1034,28 @@ function filterProducts(category) {
       }
     });
     navNonVeg.classList.add('active');
+    // Non-Veg section top ki scroll - delay tho
+    setTimeout(() => {
+      nonvegSection.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }, 100);
   }
-
-  // Scroll to top of products
-  document.getElementById('veg-pickles').scrollIntoView({behavior: 'smooth', block: 'start'});
 }
 
-// Page load ayyaka default ga All chupinchali
+// Page load ayyaka AUTOMATIC SCROLL VADDU - Banner kanipinchali
 document.addEventListener('DOMContentLoaded', function() {
-  filterProducts('all');
+  // Default ga anni sections chupinchali but scroll cheyyaku
+  const vegSection = document.querySelector('.veg-section');
+  const nonvegSection = document.querySelector('.nonveg-section');
+  if (vegSection) vegSection.style.display = 'block';
+  if (nonvegSection) nonvegSection.style.display = 'block';
+  
+  // Home active cheyyi
+  const navAll = document.getElementById('navAll');
+  if (navAll) navAll.classList.add('active');
+  
+  // filterProducts('all') CALL CHEYYAKU - scroll avuthadi
 });
+
 
         /* =========================
            SAVE CART TO LOCALSTORAGE
