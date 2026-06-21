@@ -157,6 +157,19 @@
 
 
 
+@media (max-width: 576px) {
+   .weight-btn {
+        font-size: 10px!important;
+        padding: 3px 5px!important;
+        min-width: 0!important;
+        flex: 1;
+        white-space: nowrap;
+    }
+   .card-body {
+        padding: 1rem 0.4rem!important;
+    }
+}
+
 
 
 </style>
@@ -1267,32 +1280,33 @@
             </div>
 
             <!-- Nuvvulu Karam Podi -->
-            <div class="col-6 col-md-4 col-lg-3 mb-5" data-category="masala">
-                <div class="card h-100" data-product="Home Made Nuvvulu Karam Podi">
-                    <img class="card-img-top" src="assets/nuvvula karam.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Nuvvulu Karam Podi" />
-                    <div class="card-body p-4 text-center">
-                        <p class="text-dark mb-2 fw-bold">Nuvvula Karam Podi</p>
-                        <p class="text-success mb-2"><i class="bi bi-check-lg"></i> In Stock</p>
-                        
-                        <div class="d-flex justify-content-center gap-1 mb-3 flex-wrap px-1">
-                            <button class="btn btn-outline-secondary btn-sm active" data-weight="100g" onclick="selectWeight(this,90)">100g</button>
-                            <button class="btn btn-outline-secondary btn-sm" data-weight="250g" onclick="selectWeight(this,210)">250g</button>
-                            <button class="btn btn-outline-secondary btn-sm" data-weight="500g" onclick="selectWeight(this,400)">500g</button>
-                        </div>
-                        <h4 class="fw-bold">₹<span class="price">90</span></h4>
-                    </div>
-                    <div class="card-footer bg-transparent border-0 text-center">
-                        <div class="cart-box">
-                            <button class="btn rounded-pill w-100 add-btn" style="background:#15140e; color:white;" onclick="addToCart(this.closest('.card').dataset.product, this)">Add To Cart</button>
-                            <div class="qty-box d-none align-items-center justify-content-center gap-2">
-                                <button class="btn btn-dark btn-sm" onclick="decreaseQtyCard(this)">-</button>
-                                <span class="qty">1</span>
-                                <button class="btn btn-dark btn-sm" onclick="increaseQtyCard(this)">+</button>
-                            </div>
-                        </div>
-                    </div>
+<div class="col-6 col-md-4 col-lg-3 mb-5" data-category="masala">
+    <div class="card h-100" data-product="Home Made Nuvvulu Karam Podi">
+        <img class="card-img-top" src="assets/nuvvula karam.jpeg" style="height:220px; width:100%; object-fit:cover;" alt="Nuvvulu Karam Podi" />
+        <div class="card-body p-4 text-center">
+            <p class="text-dark mb-2 fw-bold">Nuvvula Karam Podi</p>
+            <p class="text-success mb-2"><i class="bi bi-check-lg"></i> In Stock</p>
+            
+            <!-- MARCHINA DIV: flex-wrap tesesa + weight-btn class add chesa -->
+            <div class="d-flex justify-content-center gap-1 mb-3 px-1">
+                <button class="btn btn-outline-secondary btn-sm active weight-btn" data-weight="100g" onclick="selectWeight(this,90)">100g</button>
+                <button class="btn btn-outline-secondary btn-sm weight-btn" data-weight="250g" onclick="selectWeight(this,210)">250g</button>
+                <button class="btn btn-outline-secondary btn-sm weight-btn" data-weight="500g" onclick="selectWeight(this,400)">500g</button>
+            </div>
+            <h4 class="fw-bold">₹<span class="price">90</span></h4>
+        </div>
+        <div class="card-footer bg-transparent border-0 text-center">
+            <div class="cart-box">
+                <button class="btn rounded-pill w-100 add-btn" style="background:#15140e; color:white;" onclick="addToCart(this.closest('.card').dataset.product, this)">Add To Cart</button>
+                <div class="qty-box d-none align-items-center justify-content-center gap-2">
+                    <button class="btn btn-dark btn-sm" onclick="decreaseQtyCard(this)">-</button>
+                    <span class="qty">1</span>
+                    <button class="btn btn-dark btn-sm" onclick="increaseQtyCard(this)">+</button>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
 
         </div>
     </div>
