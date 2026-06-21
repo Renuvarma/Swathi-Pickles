@@ -233,7 +233,6 @@ function updateUI() {
     updateBadge();
     syncUI();
 }
-
 /* =========================
    WHATSAPP ORDER
 ========================= */
@@ -262,9 +261,34 @@ function whatsappOrder() {
 }
 
 /* =========================
+   FILTER PRODUCTS - UPDATED
+========================= */
+function filterProducts(category) {
+    // 1. Sections hide/show based on data-category
+    document.querySelectorAll('section[data-category]').forEach(section => {
+        if(category === 'all') {
+            section.style.display = '';
+        } else {
+            section.style.display = section.dataset.category.includes(category)? '' : 'none';
+        }
+    });
+
+    // 2. Navbar active class update
+    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+
+    let navId = 'navAll';
+    if(category === 'veg') navId = 'navVeg';
+    else if(category === 'nonveg') navId = 'navNonVeg';
+    else if(category === 'masala') navId = 'navMasala';
+
+    document.getElementById(navId)?.classList.add('active');
+}
+
+/* =========================
    INIT
 ========================= */
 window.onload = function () {
     initCart();
     updateUI();
+    filterProducts('all'); // Page load lo anni chupinchu
 };
