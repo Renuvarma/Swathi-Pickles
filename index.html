@@ -1328,11 +1328,11 @@
     <p class="small text-secondary mb-0">© 2026 Swathi Pickles | Made with Love❤️</p>
   </div>
 </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+       <!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-        <!-- CART LOGIC -->
-        <script>
+<!-- CART LOGIC -->
+<script>
 let cart = [];
 
 /* =========================
@@ -1367,7 +1367,7 @@ function findItem(product, weight) {
 ========================= */
 function getWeight(card) {
     let active = card.querySelector(".btn-outline-secondary.active");
-    return active? active.dataset.weight : "1/2 Kg";
+    return active? active.dataset.weight : "250g";
 }
 
 /* =========================
@@ -1424,7 +1424,7 @@ function selectWeight(btn, price) {
 function addToCart(productName, btn) {
     let card = btn.closest('.card');
     let price = parseInt(card.querySelector('.price').innerText);
-    let weight = getWeight(card); // data-weight nundi vastadi
+    let weight = getWeight(card);
 
     let existingItem = findItem(productName, weight);
 
@@ -1526,17 +1526,17 @@ function syncUI() {
 }
 
 /* =========================
-   FILTER PRODUCTS - MASALA FIX
+   FILTER PRODUCTS - CORRECT FIX
 ========================= */
 function filterProducts(category) {
-  const vegSection = document.getElementById('veg-pickles');
-  const nonvegSection = document.getElementById('nonveg-pickles');
-  const masalaSection = document.getElementById('masala'); // MASALA ADD CHESA
+  const vegSection = document.querySelector('.veg-section');
+  const nonvegSection = document.querySelector('.nonveg-section');
+  const masalaSection = document.querySelector('.masala-section');
 
   const navAll = document.getElementById('navAll');
   const navVeg = document.getElementById('navVeg');
   const navNonVeg = document.getElementById('navNonVeg');
-  const navMasala = document.getElementById('navMasala'); // MASALA NAV ADD
+  const navMasala = document.getElementById('navMasala');
 
   document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
 
@@ -1553,7 +1553,7 @@ function filterProducts(category) {
     if(masalaSection) masalaSection.style.display = 'none';
     navVeg.classList.add('active');
     setTimeout(() => {
-      vegSection?.scrollIntoView({behavior: 'smooth', block: 'start'});
+      document.getElementById('veg-pickles')?.scrollIntoView({behavior: 'smooth', block: 'start'});
     }, 100);
   }
   else if (category === 'nonveg') {
@@ -1562,19 +1562,27 @@ function filterProducts(category) {
     if(masalaSection) masalaSection.style.display = 'none';
     navNonVeg.classList.add('active');
     setTimeout(() => {
-      nonvegSection?.scrollIntoView({behavior: 'smooth', block: 'start'});
+      document.getElementById('nonveg-pickles')?.scrollIntoView({behavior: 'smooth', block: 'start'});
     }, 100);
   }
-  else if (category === 'masala') { // IDI MISS AYYAV
+  else if (category === 'masala') {
     if(vegSection) vegSection.style.display = 'none';
     if(nonvegSection) nonvegSection.style.display = 'none';
     if(masalaSection) masalaSection.style.display = 'block';
     navMasala.classList.add('active');
     setTimeout(() => {
-      masalaSection?.scrollIntoView({behavior: 'smooth', block: 'start'});
+      document.getElementById('masala')?.scrollIntoView({behavior: 'smooth', block: 'start'});
     }, 100);
   }
+
+  // Mobile menu close chey
+  const menuToggle = document.getElementById('navbarSupportedContent');
+  const bsCollapse = bootstrap.Collapse.getInstance(menuToggle);
+  if (bsCollapse) {
+      bsCollapse.hide();
+  }
 }
+
 /* =========================
    NAVBAR BRAND SCROLL
 ========================= */
@@ -1599,11 +1607,13 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCartCount();
     syncUI();
 
-    // Filter init
+    // Filter init - anni sections chupinchu
     const vegSection = document.querySelector('.veg-section');
     const nonvegSection = document.querySelector('.nonveg-section');
+    const masalaSection = document.querySelector('.masala-section');
     if (vegSection) vegSection.style.display = 'block';
     if (nonvegSection) nonvegSection.style.display = 'block';
+    if (masalaSection) masalaSection.style.display = 'block';
 
     const navAll = document.getElementById('navAll');
     if (navAll) navAll.classList.add('active');
