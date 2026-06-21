@@ -7,8 +7,6 @@
     <meta name="author" content="" />
     <title>Swathi Pickles - Home</title>
 
-        
-    
     <!-- ===== OG TAGS START  ===== -->
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website" />
@@ -27,12 +25,6 @@
     <meta name="twitter:description" content="Authentic Andhra style Veg & Non-Veg pickles. Fresh & Homemade. No preservatives. Order now!" />
     <meta name="twitter:image" content="https://swathi-pickles.vercel.app/assets/banner.jpeg" />
     <!-- ===== OG TAGS END ===== -->
-    
-    
-
-
-
-
 
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
@@ -45,8 +37,10 @@
     html {
         scroll-behavior: smooth;
     }
-    #veg-pickles, #nonveg-pickles {
-        scroll-margin-top: 120px;
+    
+    /* FIX 1: scroll-margin-top 130px chesanu + masala add chesanu */
+    #veg-pickles, #nonveg-pickles, #masala {
+        scroll-margin-top: 130px;
     }
 
     /* Navbar Alignment Fix */
@@ -155,8 +149,7 @@
     box-shadow: none;
 }
 
-
-
+/* Mobile Weight Buttons Fix - Duplicate tesesa */
 @media (max-width: 576px) {
    .weight-btn {
         font-size: 10px!important;
@@ -169,29 +162,6 @@
         padding: 1rem 0.4rem!important;
     }
 }
-
- @media (max-width: 576px) {
-           .weight-btn {
-                font-size: 10px!important;
-                padding: 3px 5px!important;
-                min-width: 0!important;
-                flex: 1;
-                white-space: nowrap;
-            }
-           .card-body {
-                padding: 1rem 0.4rem!important;
-            }
-        }
-        
-        /* 2. Menu click cheste heading navbar kinda cover avvakunda */
-        #masala, #veg-pickles, #nonveg-pickles {
-            scroll-margin-top: 80px; /* nee navbar height batti marchuko */
-        }
-
-
-
-
-
 </style>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -220,24 +190,24 @@
                     <span class="badge bg-dark text-white ms-1 rounded-pill" id="cart-count">0</span>
                 </a>
 
-                <!-- Collapsible Menu - Desktop lo horizontal, Mobile lo dropdown -->
+                <!-- Collapsible Menu - FIX 2: href marchanu, return false tesesa -->
                 <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
                     <ul class="navbar-nav mb-2 mb-lg-0">
 <li class="nav-item">
     <a class="nav-link active" id="navAll" href="#" onclick="filterProducts('all'); return false;">Home</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" id="navVeg" href="#" onclick="filterProducts('veg'); return false;">
+    <a class="nav-link" id="navVeg" href="#veg-pickles" onclick="filterProducts('veg');">
         <i class="bi bi-circle-fill text-success" style="font-size: 0.6rem;"></i> Veg Pickles
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" id="navNonVeg" href="#" onclick="filterProducts('nonveg'); return false;">
+    <a class="nav-link" id="navNonVeg" href="#nonveg-pickles" onclick="filterProducts('nonveg');">
         <i class="bi bi-circle-fill text-danger" style="font-size: 0.6rem;"></i> Non-Veg Pickles
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" id="navMasala" href="#" onclick="filterProducts('masala'); return false;">
+    <a class="nav-link" id="navMasala" href="#masala" onclick="filterProducts('masala');">
         <i class="bi bi-circle-fill text-warning" style="font-size: 0.6rem;"></i> Home Made Masala
     </a>
 </li>
@@ -260,20 +230,13 @@
             </div>
         </header>
 
-
-
-
-
-
-       <!-- Veg Pickles Section -->
-        <section class="py-5 veg-section" id="veg-pickles">
+       <!-- Veg Pickles Section - FIX 3: id ni h2 ki marchanu -->
+        <section class="py-5 veg-section">
             <div class="container px-4 px-lg-5 mt-5">
-                <h2 class="fw-bolder mb-4 text-center veg-heading" >
+                <h2 id="veg-pickles" class="fw-bolder mb-4 text-center veg-heading">
                     <i class="bi bi-flower1 me-2"></i>Veg Pickles
                 </h2>
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-
-
 
 
                      <!-- Mango Pickle -->
