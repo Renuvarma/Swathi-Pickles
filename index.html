@@ -1420,13 +1420,21 @@
 <script>
 // Home nunchi back kottey site nunchi exit
 (function() {
+    // Home ki vachinappudu history motham replace chey
+    history.replaceState(null, null, location.href);
+    
+    // Inko fake entry add chey - back kottey trigger avvali
     history.pushState(null, null, location.href);
+    
     window.addEventListener('popstate', function() {
-        // Method 1: History motham clear chesi bayataki
-        window.history.go(-(window.history.length - 1));
+        // Direct bayataki - no confirmation
+        window.location.href = 'about:blank';
         
-        // Method 2: Panicheyyakapothe Google ki pampu - edi okati vaduko
-        // location.href = 'https://www.google.com';
+        // Alternative: Browser close cheyyadaniki try chey
+        // window.close();
+        
+        // Leka Google ki pampu
+        // window.location.replace('https://www.google.com');
     });
 })();
 </script>
