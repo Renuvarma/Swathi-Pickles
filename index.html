@@ -38,12 +38,12 @@
         scroll-behavior: smooth;
     }
     
-    /* FIX: Veg Pickles ki separate + Mobile ki ekkuva margin */
+    /* FIX: Desktop - Anni 170px chesa */
     #veg-pickles {
-        scroll-margin-top: 170px; /* Desktop - Veg ki ekkuva */
+        scroll-margin-top: 170px;
     }
     #nonveg-pickles, #masala {
-        scroll-margin-top: 130px; /* Desktop - Remaining */
+        scroll-margin-top: 170px; /* 130 nunchi 170 ki penchanu */
     }
 
     /* Navbar Alignment Fix */
@@ -73,7 +73,7 @@
         }
     }
 
-    /* Mobile - VEG PICKLES FIX IKKADA */
+    /* Mobile - FINAL FIX */
     @media (max-width: 991px) {
    .navbar-brand {
             font-size: 0.95rem!important;
@@ -82,12 +82,12 @@
             padding: 0.25rem 0.5rem;
         }
         
-        /* MOBILE LO VEG PICKLES KI EKKUVA MARGIN */
+        /* MOBILE LO ANNI HEADINGS KI SAME MARGIN */
         #veg-pickles {
-            scroll-margin-top: 190px !important; /* Mobile - Veg ki inka ekkuva */
+            scroll-margin-top: 190px !important;
         }
         #nonveg-pickles, #masala {
-            scroll-margin-top: 140px !important; /* Mobile - Remaining */
+            scroll-margin-top: 190px !important; /* 140 nunchi 190 ki marchanu - IKKADA FIX */
         }
         
         /* Veg section container ki extra top padding */
