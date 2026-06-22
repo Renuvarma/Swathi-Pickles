@@ -1536,10 +1536,9 @@ function syncUI() {
 }
 
 /* =========================
-   FILTER PRODUCTS - SAFE VERSION
+   FILTER PRODUCTS - MOBILE DOUBLE TAP FIX
 ========================= */
 function filterProducts(category) {
-  // ID lu vadali - class kadu
   const vegSection = document.getElementById('veg-pickles-section');
   const nonvegSection = document.getElementById('nonveg-pickles-section');
   const masalaSection = document.getElementById('masala-section');
@@ -1563,31 +1562,42 @@ function filterProducts(category) {
     navAll.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  else if (category === 'veg') {
-    if(vegSection) vegSection.style.display = 'block';
-    navVeg.classList.add('active');
-    setTimeout(() => {
-      const element = document.getElementById('veg-pickles');
-      const offset = window.innerWidth < 992 ? 190 : 170;
-      window.scrollTo({
-        top: element.offsetTop - offset,
-        behavior: 'smooth'
+  else {
+    let targetSection, targetId, navElement;
+    
+    if (category === 'veg') {
+      targetSection = vegSection;
+      targetId = 'veg-pickles';
+      navElement = navVeg;
+    } else if (category === 'nonveg') {
+      targetSection = nonvegSection;
+      targetId = 'nonveg-pickles';
+      navElement = navNonVeg;
+    } else if (category === 'masala') {
+      targetSection = masalaSection;
+      targetId = 'masala';
+      navElement = navMasala;
+    }
+
+    if (targetSection) targetSection.style.display = 'block';
+    if (navElement) navElement.classList.add('active');
+
+    // FIX: Double requestAnimationFrame - Layout complete ayyaka scroll chey
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const element = document.getElementById(targetId);
+        if (element) {
+          const navbarHeight = document.querySelector('.navbar').offsetHeight;
+          const offset = window.innerWidth < 992 ? 190 : 170;
+          const targetPosition = element.getBoundingClientRect().top + window.pageYOffset - offset;
+          
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+        }
       });
-    }, 150);
-  }
-  else if (category === 'nonveg') {
-    if(nonvegSection) nonvegSection.style.display = 'block';
-    navNonVeg.classList.add('active');
-    setTimeout(() => {
-      document.getElementById('nonveg-pickles')?.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }, 100);
-  }
-  else if (category === 'masala') {
-    if(masalaSection) masalaSection.style.display = 'block';
-    navMasala.classList.add('active');
-    setTimeout(() => {
-      document.getElementById('masala')?.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }, 100);
+    });
   }
 
   const menuToggle = document.getElementById('navbarSupportedContent');
@@ -1598,19 +1608,21 @@ function filterProducts(category) {
 }
 
 /* =========================
-   ON PAGE LOAD - INIT
+   PAGE LOAD + RECENT APPS FIX
 ========================= */
-document.addEventListener('DOMContentLoaded', function() {
+function initPage() {
+    // Browser scroll restore cheyakudadhu
     if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
     }
+    
+    // Force top ki pampinchu
     window.scrollTo(0, 0);
 
     initCart();
     updateCartCount();
     syncUI();
 
-    // ID lu vadali
     const vegSection = document.getElementById('veg-pickles-section');
     const nonvegSection = document.getElementById('nonveg-pickles-section');
     const masalaSection = document.getElementById('masala-section');
@@ -1622,6 +1634,17 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
     const navAll = document.getElementById('navAll');
     if (navAll) navAll.classList.add('active');
+}
+
+// Normal page load
+document.addEventListener('DOMContentLoaded', initPage);
+
+// FIX: Recent apps nunchi back vasthe kuda top ki vellali
+window.addEventListener('pageshow', function(event) {
+    // event.persisted = true ante cache nunchi load ayyindi
+    if (event.persisted) {
+        window.scrollTo(0, 0);
+    }
 });
 </script>
 
