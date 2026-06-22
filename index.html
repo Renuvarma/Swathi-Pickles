@@ -1419,24 +1419,11 @@
 <!-- BACK BUTTON HANDLE - IKKADA PASTE CHEY -->
 <script>
 // Home nunchi back kottey site nunchi exit
-(function() {
-    // Page load ayyaka check chey - direct home ki vachava leda
-    if (document.referrer === '' || !document.referrer.includes(window.location.hostname)) {
-        // Direct ga home open cheste - history replace
-        history.replaceState(null, null, location.href);
-    } else {
-        // Cart nunchi vachav - oka entry push chey
-        history.pushState(null, null, location.href);
-    }
-    
-    window.addEventListener('popstate', function() {
-        // Direct Google ki pampu - history lo migaladu
-        window.location.replace('https://www.google.com');
-        
-        // Leka direct close - mobile lo work avthadi
-        // window.close();
-    });
-})();
+// Direct exit - no history drama
+history.replaceState(null, null, location.href);
+window.addEventListener('popstate', function() {
+    window.close();
+});
 </script>
 
 </body>
