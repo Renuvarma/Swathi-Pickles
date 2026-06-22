@@ -41,14 +41,10 @@ function selectWeight(btn, price) {
     let card = btn.closest(".card");
     let product = card.dataset.product;
 
-    // 1. Active class update
     card.querySelectorAll(".btn-outline-secondary").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-
-    // 2. Price update
     card.querySelector(".price").innerText = price;
 
-    // 3. FIX: data-weight nundi direct teesko. innerText vaddu.
     let weight = btn.dataset.weight;
     let item = findItem(product, weight);
 
@@ -58,12 +54,10 @@ function selectWeight(btn, price) {
     let qtySpan = box.querySelector(".qty");
 
     if (item && item.qty > 0) {
-        // Ee weight ki already cart lo unte + - show
         addBtn.classList.add("d-none");
         qtyBox.classList.remove("d-none");
         qtySpan.innerText = item.qty;
     } else {
-        // Ee weight ki leka pothe Add To Cart show
         addBtn.classList.remove("d-none");
         qtyBox.classList.add("d-none");
         qtySpan.innerText = 1;
@@ -76,7 +70,7 @@ function selectWeight(btn, price) {
 function addToCart(product, btn) {
     let card = btn.closest(".card");
     let price = parseInt(card.querySelector(".price").innerText);
-    let weight = getWeight(card); // Ippudu data-weight nundi vastadi
+    let weight = getWeight(card);
 
     let item = findItem(product, weight);
 
@@ -233,6 +227,7 @@ function updateUI() {
     updateBadge();
     syncUI();
 }
+
 /* =========================
    WHATSAPP ORDER
 ========================= */
@@ -261,34 +256,95 @@ function whatsappOrder() {
 }
 
 /* =========================
-   FILTER PRODUCTS - UPDATED
+   FILTER PRODUCTS
 ========================= */
 function filterProducts(category) {
-    // 1. Sections hide/show based on data-category
-    document.querySelectorAll('section[data-category]').forEach(section => {
-        if(category === 'all') {
-            section.style.display = '';
-        } else {
-            section.style.display = section.dataset.category.includes(category)? '' : 'none';
-        }
-    });
+  const vegSection = document.getElementById('veg-pickles-section');
+  const nonvegSection = document.getElementById('nonveg-pickles-section');
+  const masalaSection = document.getElementById('masala-section');
 
-    // 2. Navbar active class update
-    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+  const navAll = document.getElementById('navAll');
+  const navVeg = document.getElementById('navVeg');
+  const navNonVeg = document.getElementById('navNonVeg');
+  const navMasala = document.getElementById('navMasala');
 
-    let navId = 'navAll';
-    if(category === 'veg') navId = 'navVeg';
-    else if(category === 'nonveg') navId = 'navNonVeg';
-    else if(category === 'masala') navId = 'navMasala';
+  document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
 
-    document.getElementById(navId)?.classList.add('active');
+  if(vegSection) vegSection.style.display = 'none';
+  if(nonvegSection) nonvegSection.style.display = 'none';
+  if(masalaSection) masalaSection.style.display = 'none';
+
+  if (category === 'all') {
+    if(vegSection) vegSection.style.display = 'block';
+    if(nonvegSection) nonvegSection.style.display = 'block';
+    if(masalaSection) masalaSection.style.display = 'block';
+    navAll.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  else if (category === 'veg') {
+    if(vegSection) vegSection.style.display = 'block';
+    navVeg.classList.add('active');
+    setTimeout(() => {
+      const element = document.getElementById('veg-pickles');
+      const offset = window.innerWidth < 992? 190 : 170;
+      window.scrollTo({
+        top: element.offsetTop - offset,
+        behavior: 'smooth'
+      });
+    }, 150);
+  }
+  else if (category === 'nonveg') {
+    if(nonvegSection) nonvegSection.style.display = 'block';
+    navNonVeg.classList.add('active');
+    setTimeout(() => {
+      document.getElementById('nonveg-pickles')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }, 100);
+  }
+  else if (category === 'masala') {
+    if(masalaSection) masalaSection.style.display = 'block';
+    navMasala.classList.add('active');
+    setTimeout(() => {
+      document.getElementById('masala')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }, 100);
+  }
+
+  const menuToggle = document.getElementById('navbarSupportedContent');
+  const bsCollapse = bootstrap.Collapse.getInstance(menuToggle);
+  if (bsCollapse) {
+      bsCollapse.hide();
+  }
 }
 
 /* =========================
-   INIT
+   SCROLL - LOGO SHOW/HIDE - OKATE SARI
 ========================= */
-window.onload = function () {
+function handleScroll() {
+    let logo = document.getElementById("brandLogo");
+    if (!logo) return;
+
+    if (window.scrollY > 100) {
+        logo.classList.add("show");
+    } else {
+        logo.classList.remove("show");
+    }
+}
+
+/* =========================
+   ON PAGE LOAD - OKATE SARI
+========================= */
+document.addEventListener('DOMContentLoaded', function() {
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
     initCart();
     updateUI();
-    filterProducts('all'); // Page load lo anni chupinchu
-};
+    filterProducts('all');
+    handleScroll();
+});
+
+window.addEventListener('scroll', handleScroll);
+window.addEventListener('pageshow', function() {
+    handleScroll();
+});

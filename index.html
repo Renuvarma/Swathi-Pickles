@@ -43,31 +43,34 @@
         scroll-margin-top: 170px;
     }
     #nonveg-pickles, #masala {
-        scroll-margin-top: 170px; /* 130 nunchi 170 ki penchanu */
+        scroll-margin-top: 170px;
     }
 
-    /* Navbar Alignment Fix */
-    .navbar-brand {
+    /* TEXT LOGO - FIRST LO KANIPINCHADU, SCROLL CHESTE VASTADI */
+    #brandLogo {
         font-size: 1.1rem;
         white-space: nowrap;
         font-weight: 700;
         opacity: 0;
-        transition: opacity 0.3s ease;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        margin-right: 1rem;
     }
-    .navbar-brand.show {
+    #brandLogo.show {
         opacity: 1;
+        visibility: visible;
     }
 
     /* Desktop */
     @media (min-width: 992px) {
-   .navbar.btn-outline-dark {
+        .navbar .btn-outline-dark {
             padding: 0.5rem 1.2rem;
             font-size: 1rem;
         }
-   .navbar-nav {
+        .navbar-nav {
             gap: 2rem;
         }
-   .nav-link {
+        .nav-link {
             font-weight: 500;
             font-size: 1rem;
         }
@@ -75,10 +78,10 @@
 
     /* Mobile - FINAL FIX */
     @media (max-width: 991px) {
-   .navbar-brand {
+        #brandLogo {
             font-size: 0.95rem!important;
         }
-   .navbar-toggler {
+        .navbar-toggler {
             padding: 0.25rem 0.5rem;
         }
         
@@ -87,7 +90,7 @@
             scroll-margin-top: 190px !important;
         }
         #nonveg-pickles, #masala {
-            scroll-margin-top: 190px !important; /* 140 nunchi 190 ki marchanu - IKKADA FIX */
+            scroll-margin-top: 190px !important;
         }
         
         /* Veg section container ki extra top padding */
@@ -139,6 +142,12 @@
         filter: drop-shadow(0 0 4px currentColor);
     }
 
+    /* Dot Colors */
+    .nav-item:nth-child(1) .bi-circle-fill { color: #000!important; }
+    .nav-item:nth-child(2) .bi-circle-fill { color: #28a745!important; }
+    .nav-item:nth-child(3) .bi-circle-fill { color: #dc3545!important; }
+    .nav-item:nth-child(4) .bi-circle-fill { color: #ffc107!important; }
+
     /* Weight Buttons Black Theme */
     .card .btn-outline-secondary {
         background: white;
@@ -167,14 +176,14 @@
 
     /* Mobile Weight Buttons Fix */
     @media (max-width: 576px) {
-   .weight-btn {
+        .weight-btn {
             font-size: 10px!important;
             padding: 3px 5px!important;
             min-width: 0!important;
             flex: 1;
             white-space: nowrap;
         }
-   .card-body {
+        .card-body {
             padding: 1rem 0.4rem!important;
         }
     }
@@ -187,50 +196,56 @@
     </head>
     <body>
         <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm" id="mainNav">
-            <div class="container-fluid px-2">
-
-                <!-- Left: Hamburger - Mobile lo matrame -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm" id="mainNav">
+    <div class="container-fluid px-3">
+        <div class="d-flex w-100 align-items-center">
+            
+            <!-- Left: Hamburger + Text -->
+            <div class="d-flex align-items-center">
+                <button class="navbar-toggler d-lg-none me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <!-- Center: Brand - Scroll chesthe vastadi Mobile + Desktop -->
-                <a class="navbar-brand fw-bold mx-auto" id="navBrand" href="index.html">
-                    <i class="bi bi-shop me-1"></i>Swathi Pickles
-                </a>
-
-                <!-- Right: Cart - Always visible -->
-                <a href="cart.html" class="btn btn-outline-dark order-lg-last">
-                    <i class="bi-cart-fill"></i>
-                    <span class="badge bg-dark text-white ms-1 rounded-pill" id="cart-count">0</span>
-                </a>
-
-                <!-- Collapsible Menu - FIX 2: href marchanu, return false tesesa -->
-                <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
-                    <ul class="navbar-nav mb-2 mb-lg-0">
-<li class="nav-item">
-    <a class="nav-link active" id="navAll" href="#" onclick="filterProducts('all'); return false;">Home</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" id="navVeg" href="#veg-pickles" onclick="filterProducts('veg');">
-        <i class="bi bi-circle-fill text-success" style="font-size: 0.6rem;"></i> Veg Pickles
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" id="navNonVeg" href="#nonveg-pickles" onclick="filterProducts('nonveg');">
-        <i class="bi bi-circle-fill text-danger" style="font-size: 0.6rem;"></i> Non-Veg Pickles
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" id="navMasala" href="#masala" onclick="filterProducts('masala');">
-        <i class="bi bi-circle-fill text-warning" style="font-size: 0.6rem;"></i> Home Made Masala
-    </a>
-</li>
-                    </ul>
-                </div>
+                <!-- IDI MUKHYAM - Footer laaga shop icon -->
+<a class="navbar-brand fw-bold" id="brandLogo" href="index.html">
+    <i class="bi bi-shop me-1"></i>Swathi Pickles
+</a>
             </div>
-        </nav>
+
+            <!-- Center: Menu -->
+            <div class="collapse navbar-collapse justify-content-center flex-grow-1" id="navbarSupportedContent">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="navAll" href="#" onclick="filterProducts('all'); return false;">
+                            <i class="bi bi-circle-fill"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="navVeg" href="#veg-pickles" onclick="filterProducts('veg');">
+                            <i class="bi bi-circle-fill"></i>Veg Pickles
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="navNonVeg" href="#nonveg-pickles" onclick="filterProducts('nonveg');">
+                            <i class="bi bi-circle-fill"></i>Non-Veg Pickles
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="navMasala" href="#masala" onclick="filterProducts('masala');">
+                            <i class="bi bi-circle-fill"></i>Home Made Masala
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Right: Cart -->
+            <a href="cart.html" class="btn btn-outline-dark ms-auto">
+                <i class="bi-cart-fill"></i>
+                <span class="badge bg-dark text-white ms-1 rounded-pill" id="cart-count">0</span>
+            </a>
+        </div>
+    </div>
+</nav>
 
         <!-- Header-->
         <header class="bg-dark py-5" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);">
@@ -1344,286 +1359,11 @@
     <p class="small text-secondary mb-0">© 2026 Swathi Pickles | Made with Love❤️</p>
   </div>
 </footer>
-       <!-- Bootstrap core JS-->
+      <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- CART LOGIC -->
-<script>
-let cart = [];
-
-/* =========================
-   INIT CART
-========================= */
-function initCart() {
-    let saved = localStorage.getItem("cart");
-    try {
-        cart = saved? JSON.parse(saved) : [];
-    } catch {
-        cart = [];
-    }
-}
-
-/* =========================
-   SAVE CART
-========================= */
-function saveCart() {
-    localStorage.setItem("cart", JSON.stringify(cart));
-    updateCartCount();
-}
-
-/* =========================
-   FIND ITEM
-========================= */
-function findItem(product, weight) {
-    return cart.find(i => i.name === product && i.weight === weight);
-}
-
-/* =========================
-   GET WEIGHT
-========================= */
-function getWeight(card) {
-    let active = card.querySelector(".btn-outline-secondary.active");
-    return active? active.dataset.weight : "250g";
-}
-
-/* =========================
-   UPDATE CART COUNT
-========================= */
-function updateCartCount() {
-    let count = cart.reduce((sum, item) => sum + item.qty, 0);
-    let badge = document.getElementById('cart-count');
-    if (badge) {
-        badge.innerText = count;
-        badge.style.display = count > 0? 'inline-block' : 'none';
-    }
-}
-
-/* =========================
-   SELECT WEIGHT
-========================= */
-function selectWeight(btn, price) {
-    let card = btn.closest('.card');
-    let product = card.dataset.product;
-
-    card.querySelectorAll('.btn-outline-secondary').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    card.querySelector('.price').innerText = price;
-
-    let weight = btn.dataset.weight;
-    let item = findItem(product, weight);
-
-    let cartBox = card.querySelector('.cart-box');
-    let addBtn = cartBox.querySelector('.add-btn');
-    let qtyBox = cartBox.querySelector('.qty-box');
-    let qtySpan = cartBox.querySelector('.qty');
-
-    if (item && item.qty > 0) {
-        addBtn.classList.add('d-none');
-        qtyBox.classList.remove('d-none');
-        qtyBox.classList.add('d-flex');
-        qtySpan.innerText = item.qty;
-    } else {
-        addBtn.classList.remove('d-none');
-        qtyBox.classList.add('d-none');
-        qtyBox.classList.remove('d-flex');
-        qtySpan.innerText = 1;
-    }
-}
-
-/* =========================
-   ADD TO CART
-========================= */
-function addToCart(productName, btn) {
-    let card = btn.closest('.card');
-    let price = parseInt(card.querySelector('.price').innerText);
-    let weight = getWeight(card);
-
-    let existingItem = findItem(productName, weight);
-
-    if (existingItem) {
-        existingItem.qty += 1;
-    } else {
-        cart.push({
-            name: productName,
-            price: price,
-            weight: weight,
-            qty: 1
-        });
-    }
-
-    saveCart();
-
-    let cartBox = btn.closest('.cart-box');
-    cartBox.querySelector('.add-btn').classList.add('d-none');
-    let qtyBox = cartBox.querySelector('.qty-box');
-    qtyBox.classList.remove('d-none');
-    qtyBox.classList.add('d-flex');
-
-    let currentItem = findItem(productName, weight);
-    qtyBox.querySelector('.qty').innerText = currentItem.qty;
-}
-
-/* =========================
-   INCREASE QTY IN CARD
-========================= */
-function increaseQtyCard(btn) {
-    let card = btn.closest('.card');
-    let productName = card.dataset.product;
-    let weight = getWeight(card);
-
-    let item = findItem(productName, weight);
-    if (item) {
-        item.qty++;
-        saveCart();
-        btn.parentElement.querySelector('.qty').innerText = item.qty;
-    }
-}
-
-/* =========================
-   DECREASE QTY IN CARD
-========================= */
-function decreaseQtyCard(btn) {
-    let card = btn.closest('.card');
-    let productName = card.dataset.product;
-    let weight = getWeight(card);
-
-    let itemIndex = cart.findIndex(i => i.name === productName && i.weight === weight);
-    if (itemIndex > -1) {
-        if (cart[itemIndex].qty > 1) {
-            cart[itemIndex].qty--;
-            btn.parentElement.querySelector('.qty').innerText = cart[itemIndex].qty;
-        } else {
-            cart.splice(itemIndex, 1);
-            let cartBox = btn.closest('.cart-box');
-            cartBox.querySelector('.add-btn').classList.remove('d-none');
-            cartBox.querySelector('.qty-box').classList.add('d-none');
-            cartBox.querySelector('.qty-box').classList.remove('d-flex');
-        }
-        saveCart();
-    }
-}
-
-/* =========================
-   SYNC UI ON LOAD
-========================= */
-function syncUI() {
-    document.querySelectorAll('.card').forEach(card => {
-        let productName = card.dataset.product;
-        if (!productName) return;
-
-        let weight = getWeight(card);
-        let item = findItem(productName, weight);
-
-        let cartBox = card.querySelector('.cart-box');
-        if (!cartBox) return;
-
-        let addBtn = cartBox.querySelector('.add-btn');
-        let qtyBox = cartBox.querySelector('.qty-box');
-        let qtySpan = cartBox.querySelector('.qty');
-
-        if (item && item.qty > 0) {
-            addBtn.classList.add('d-none');
-            qtyBox.classList.remove('d-none');
-            qtyBox.classList.add('d-flex');
-            qtySpan.innerText = item.qty;
-        } else {
-            addBtn.classList.remove('d-none');
-            qtyBox.classList.add('d-none');
-            qtyBox.classList.remove('d-flex');
-            qtySpan.innerText = 1;
-        }
-    });
-}
-
-/* =========================
-   FILTER PRODUCTS - SAFE VERSION
-========================= */
-function filterProducts(category) {
-  // ID lu vadali - class kadu
-  const vegSection = document.getElementById('veg-pickles-section');
-  const nonvegSection = document.getElementById('nonveg-pickles-section');
-  const masalaSection = document.getElementById('masala-section');
-
-  const navAll = document.getElementById('navAll');
-  const navVeg = document.getElementById('navVeg');
-  const navNonVeg = document.getElementById('navNonVeg');
-  const navMasala = document.getElementById('navMasala');
-
-  document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-
-  // Mudhu anni hide chey
-  if(vegSection) vegSection.style.display = 'none';
-  if(nonvegSection) nonvegSection.style.display = 'none';
-  if(masalaSection) masalaSection.style.display = 'none';
-
-  if (category === 'all') {
-    if(vegSection) vegSection.style.display = 'block';
-    if(nonvegSection) nonvegSection.style.display = 'block';
-    if(masalaSection) masalaSection.style.display = 'block';
-    navAll.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-  else if (category === 'veg') {
-    if(vegSection) vegSection.style.display = 'block';
-    navVeg.classList.add('active');
-    setTimeout(() => {
-      const element = document.getElementById('veg-pickles');
-      const offset = window.innerWidth < 992 ? 190 : 170;
-      window.scrollTo({
-        top: element.offsetTop - offset,
-        behavior: 'smooth'
-      });
-    }, 150);
-  }
-  else if (category === 'nonveg') {
-    if(nonvegSection) nonvegSection.style.display = 'block';
-    navNonVeg.classList.add('active');
-    setTimeout(() => {
-      document.getElementById('nonveg-pickles')?.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }, 100);
-  }
-  else if (category === 'masala') {
-    if(masalaSection) masalaSection.style.display = 'block';
-    navMasala.classList.add('active');
-    setTimeout(() => {
-      document.getElementById('masala')?.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }, 100);
-  }
-
-  const menuToggle = document.getElementById('navbarSupportedContent');
-  const bsCollapse = bootstrap.Collapse.getInstance(menuToggle);
-  if (bsCollapse) {
-      bsCollapse.hide();
-  }
-}
-
-/* =========================
-   ON PAGE LOAD - INIT
-========================= */
-document.addEventListener('DOMContentLoaded', function() {
-    if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-    }
-    window.scrollTo(0, 0);
-
-    initCart();
-    updateCartCount();
-    syncUI();
-
-    // ID lu vadali
-    const vegSection = document.getElementById('veg-pickles-section');
-    const nonvegSection = document.getElementById('nonveg-pickles-section');
-    const masalaSection = document.getElementById('masala-section');
-
-    if (vegSection) vegSection.style.display = 'block';
-    if (nonvegSection) nonvegSection.style.display = 'block';
-    if (masalaSection) masalaSection.style.display = 'block';
-
-    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-    const navAll = document.getElementById('navAll');
-    if (navAll) navAll.classList.add('active');
-});
-</script>
+<!-- Core theme JS - IDI OKATE UNDALI -->
+<script src="js/scripts.js"></script>
 
 </body>
 </html>
