@@ -233,7 +233,6 @@ function updateUI() {
     updateBadge();
     syncUI();
 }
-
 /* =========================
    WHATSAPP ORDER
 ========================= */
@@ -262,112 +261,34 @@ function whatsappOrder() {
 }
 
 /* =========================
-   FILTER PRODUCTS - FINAL FIX WITH SCROLL
+   FILTER PRODUCTS - UPDATED
 ========================= */
 function filterProducts(category) {
-    const vegSection = document.getElementById('veg-pickles-section');
-    const nonvegSection = document.getElementById('nonveg-pickles-section');
-    const masalaSection = document.getElementById('masala-section');
+    // 1. Sections hide/show based on data-category
+    document.querySelectorAll('section[data-category]').forEach(section => {
+        if(category === 'all') {
+            section.style.display = '';
+        } else {
+            section.style.display = section.dataset.category.includes(category)? '' : 'none';
+        }
+    });
 
-    const navAll = document.getElementById('navAll');
-    const navVeg = document.getElementById('navVeg');
-    const navNonVeg = document.getElementById('navNonVeg');
-    const navMasala = document.getElementById('navMasala');
-
+    // 2. Navbar active class update
     document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
 
-    // Hide all first
-    if(vegSection) vegSection.style.display = 'none';
-    if(nonvegSection) nonvegSection.style.display = 'none';
-    if(masalaSection) masalaSection.style.display = 'none';
+    let navId = 'navAll';
+    if(category === 'veg') navId = 'navVeg';
+    else if(category === 'nonveg') navId = 'navNonVeg';
+    else if(category === 'masala') navId = 'navMasala';
 
-    let targetElement = null;
-
-    if (category === 'all') {
-        if(vegSection) vegSection.style.display = 'block';
-        if(nonvegSection) nonvegSection.style.display = 'block';
-        if(masalaSection) masalaSection.style.display = 'block';
-        if(navAll) navAll.classList.add('active');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    else if (category === 'veg') {
-        if(vegSection) vegSection.style.display = 'block';
-        if(navVeg) navVeg.classList.add('active');
-        targetElement = document.getElementById('veg-pickles');
-    }
-    else if (category === 'nonveg') {
-        if(nonvegSection) nonvegSection.style.display = 'block';
-        if(navNonVeg) navNonVeg.classList.add('active');
-        targetElement = document.getElementById('nonveg-pickles');
-    }
-    else if (category === 'masala') {
-        if(masalaSection) masalaSection.style.display = 'block';
-        if(navMasala) navMasala.classList.add('active');
-        targetElement = document.getElementById('masala');
-    }
-
-    // FIX: 250ms delay - Mobile lo layout paint avvakunda scroll chestundi
-    if (targetElement) {
-        setTimeout(() => {
-            const offset = window.innerWidth < 992? 190 : 170;
-            const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
-            const offsetPosition = elementPosition - offset;
-
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
-        }, 250);
-    }
-
-    // Mobile menu close
-    const menuToggle = document.getElementById('navbarSupportedContent');
-    const bsCollapse = bootstrap.Collapse.getInstance(menuToggle);
-    if (bsCollapse) bsCollapse.hide();
+    document.getElementById(navId)?.classList.add('active');
 }
 
 /* =========================
-   PAGE INIT - REFRESH SCROLL FIX
+   INIT
 ========================= */
-function initPage() {
-    // 1. Browser scroll restore disable chey
-    if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-    }
-
-    // 2. Force top ki pampinchu
-    window.scrollTo(0, 0);
-    setTimeout(() => window.scrollTo(0, 0), 100);
-
+window.onload = function () {
     initCart();
     updateUI();
-
-    // 3. Anni sections chupinchu
-    const vegSection = document.getElementById('veg-pickles-section');
-    const nonvegSection = document.getElementById('nonveg-pickles-section');
-    const masalaSection = document.getElementById('masala-section');
-
-    if (vegSection) vegSection.style.display = 'block';
-    if (nonvegSection) nonvegSection.style.display = 'block';
-    if (masalaSection) masalaSection.style.display = 'block';
-
-    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-    const navAll = document.getElementById('navAll');
-    if (navAll) navAll.classList.add('active');
-}
-
-// DOM Load
-document.addEventListener('DOMContentLoaded', initPage);
-
-// FIX: Recent apps nunchi vasthe + Page refresh ayina kuda top ki
-window.addEventListener('pageshow', function(event) {
-    if (event.persisted || performance.navigation.type === 1) {
-        window.scrollTo(0, 0);
-        setTimeout(() => window.scrollTo(0, 0), 100);
-    }
-});
-
-// FIX: Page load avvagane top ki - extra safety
-window.addEventListener('load', function() {
-    setTimeout(() => window.scrollTo(0, 0), 0);
-});
+    filterProducts('all'); // Page load lo anni chupinchu
+};
