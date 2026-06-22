@@ -1416,5 +1416,20 @@
 <!-- Core theme JS - IDI OKATE UNDALI -->
 <script src="js/scripts.js"></script>
 
+<!-- BACK BUTTON HANDLE - IKKADA PASTE CHEY -->
+<script>
+// Home nunchi back kottey site nunchi exit
+(function() {
+    history.pushState(null, null, location.href);
+    window.addEventListener('popstate', function() {
+        // Method 1: History motham clear chesi bayataki
+        window.history.go(-(window.history.length - 1));
+        
+        // Method 2: Panicheyyakapothe Google ki pampu - edi okati vaduko
+        // location.href = 'https://www.google.com';
+    });
+})();
+</script>
+
 </body>
 </html>
