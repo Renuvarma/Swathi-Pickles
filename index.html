@@ -1420,21 +1420,21 @@
 <script>
 // Home nunchi back kottey site nunchi exit
 (function() {
-    // Home ki vachinappudu history motham replace chey
-    history.replaceState(null, null, location.href);
-    
-    // Inko fake entry add chey - back kottey trigger avvali
-    history.pushState(null, null, location.href);
+    // Page load ayyaka check chey - direct home ki vachava leda
+    if (document.referrer === '' || !document.referrer.includes(window.location.hostname)) {
+        // Direct ga home open cheste - history replace
+        history.replaceState(null, null, location.href);
+    } else {
+        // Cart nunchi vachav - oka entry push chey
+        history.pushState(null, null, location.href);
+    }
     
     window.addEventListener('popstate', function() {
-        // Direct bayataki - no confirmation
-        window.location.href = 'about:blank';
+        // Direct Google ki pampu - history lo migaladu
+        window.location.replace('https://www.google.com');
         
-        // Alternative: Browser close cheyyadaniki try chey
+        // Leka direct close - mobile lo work avthadi
         // window.close();
-        
-        // Leka Google ki pampu
-        // window.location.replace('https://www.google.com');
     });
 })();
 </script>
