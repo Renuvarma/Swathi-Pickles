@@ -33,14 +33,17 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
 
-   <style>
+<style>
     html {
         scroll-behavior: smooth;
     }
     
-    /* FIX 1: scroll-margin-top 130px chesanu + masala add chesanu */
-    #veg-pickles, #nonveg-pickles, #masala {
-        scroll-margin-top: 130px;
+    /* FIX: Veg Pickles ki separate + Mobile ki ekkuva margin */
+    #veg-pickles {
+        scroll-margin-top: 170px; /* Desktop - Veg ki ekkuva */
+    }
+    #nonveg-pickles, #masala {
+        scroll-margin-top: 130px; /* Desktop - Remaining */
     }
 
     /* Navbar Alignment Fix */
@@ -70,13 +73,26 @@
         }
     }
 
-    /* Mobile */
+    /* Mobile - VEG PICKLES FIX IKKADA */
     @media (max-width: 991px) {
    .navbar-brand {
             font-size: 0.95rem!important;
         }
    .navbar-toggler {
             padding: 0.25rem 0.5rem;
+        }
+        
+        /* MOBILE LO VEG PICKLES KI EKKUVA MARGIN */
+        #veg-pickles {
+            scroll-margin-top: 190px !important; /* Mobile - Veg ki inka ekkuva */
+        }
+        #nonveg-pickles, #masala {
+            scroll-margin-top: 140px !important; /* Mobile - Remaining */
+        }
+        
+        /* Veg section container ki extra top padding */
+        .veg-section .container {
+            padding-top: 1rem !important;
         }
     }
 
@@ -123,45 +139,45 @@
         filter: drop-shadow(0 0 4px currentColor);
     }
 
-/* Weight Buttons Black Theme */
-.card .btn-outline-secondary {
-    background: white;
-    color: #15140e;
-    border: 1px solid #15140e;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
+    /* Weight Buttons Black Theme */
+    .card .btn-outline-secondary {
+        background: white;
+        color: #15140e;
+        border: 1px solid #15140e;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
 
-.card .btn-outline-secondary:hover {
-    background: #f5f5f5;
-    color: #15140e;
-    border: 1px solid #15140e;
-}
+    .card .btn-outline-secondary:hover {
+        background: #f5f5f5;
+        color: #15140e;
+        border: 1px solid #15140e;
+    }
 
-.card .btn-outline-secondary.active {
-    background: #15140e !important;
-    color: white !important;
-    border: 1px solid #15140e !important;
-    box-shadow: none;
-}
+    .card .btn-outline-secondary.active {
+        background: #15140e !important;
+        color: white !important;
+        border: 1px solid #15140e !important;
+        box-shadow: none;
+    }
 
-.card .btn-outline-secondary:focus {
-    box-shadow: none;
-}
+    .card .btn-outline-secondary:focus {
+        box-shadow: none;
+    }
 
-/* Mobile Weight Buttons Fix - Duplicate tesesa */
-@media (max-width: 576px) {
+    /* Mobile Weight Buttons Fix */
+    @media (max-width: 576px) {
    .weight-btn {
-        font-size: 10px!important;
-        padding: 3px 5px!important;
-        min-width: 0!important;
-        flex: 1;
-        white-space: nowrap;
-    }
+            font-size: 10px!important;
+            padding: 3px 5px!important;
+            min-width: 0!important;
+            flex: 1;
+            white-space: nowrap;
+        }
    .card-body {
-        padding: 1rem 0.4rem!important;
+            padding: 1rem 0.4rem!important;
+        }
     }
-}
 </style>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -230,7 +246,7 @@
             </div>
         </header>
 
-       <!-- Veg Pickles Section - FIX 3: id ni h2 ki marchanu -->
+       <!-- Veg Pickles Section -  -->
         <section class="py-5 veg-section">
             <div class="container px-4 px-lg-5 mt-5">
                 <h2 id="veg-pickles" class="fw-bolder mb-4 text-center veg-heading">
