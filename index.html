@@ -1416,25 +1416,63 @@
 <!-- Core theme JS -->
 <script src="js/scripts.js"></script>
 
-<!-- BACK BUTTON + HASH BLOCK + SCROLL FIX -->
+<!-- BACK BUTTON + HASH BLOCK + SCROLL + DYNAMIC UNAVAILABLE FIX -->
 <script>
 // 1. Browser scroll restore aapu
 if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
 }
 
-// 2. Menu links click cheste hash add avvadu - smooth scroll matrame
+// 2. DOM Load ayyaka run ayyevi
 document.addEventListener('DOMContentLoaded', function() {
-    // Navbar lo unna anchor links anni pattuko
+    // 2A. Menu links click cheste hash add avvadu - smooth scroll matrame
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
-            e.preventDefault(); // URL lo # add avvakunda aapu
+            e.preventDefault();
             const targetId = this.getAttribute('href');
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
                 targetElement.scrollIntoView({ behavior: 'smooth' });
             }
         });
+    });
+
+    // 2B. DYNAMIC UNAVAILABLE - Only Add to Cart disable, no alert
+    document.querySelectorAll('.card').forEach(card => {
+        const cardText = card.innerText.toLowerCase();
+        
+        if (cardText.includes('currently unavailable') || cardText.includes('out of stock')) {
+            
+            // Weight buttons touch cheyyamu - avi normal ga panichestai
+            // 1/2 Kg click cheste ₹700, 1 Kg click cheste ₹1400 ✅
+            
+            // ONLY Add to Cart button disable chey
+            const addButton = card.querySelector('.add-btn');
+            if (addButton) {
+                addButton.classList.add('disabled');
+                addButton.setAttribute('disabled', 'true');
+                addButton.style.background = '#6c757d';
+                addButton.style.cursor = 'not-allowed';
+                addButton.innerText = 'Coming Soon';
+                addButton.onclick = null; // addToCart() call avvakunda aapu
+                
+                // Click chesina em avvadu
+                addButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            }
+            
+            // Quantity box unte disable chey
+            const qtyBox = card.querySelector('.qty-box');
+            if (qtyBox) {
+                qtyBox.style.pointerEvents = 'none';
+                qtyBox.style.opacity = '0.5';
+                qtyBox.querySelectorAll('button').forEach(btn => {
+                    btn.setAttribute('disabled', 'true');
+                });
+            }
+        }
     });
 });
 
