@@ -1410,41 +1410,23 @@
     <p class="small text-secondary mb-0">© 2026 Swathi Pickles | Made with Love❤️</p>
   </div>
 </footer>
-   <!-- Bootstrap core JS-->
+    <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core theme JS - IDI OKATE UNDALI -->
 <script src="js/scripts.js"></script>
 
-<!-- BACK BUTTON HANDLE - NO FLASH VERSION -->
+<!-- BACK BUTTON HANDLE - SINGLE BACK = EXIT -->
 <script>
-// Page load ayyaka matrame run avvu - flash radu
-document.addEventListener('DOMContentLoaded', function() {
-    // Cart nunchi vachava leka fresh load aa check chey
-    if (document.referrer.includes('cart.html')) {
-        // Cart nunchi vachav - Back = Exit set chey
-        history.replaceState({from: 'cart'}, null, location.href);
-    } else {
-        // Fresh load - normal back behavior
-        history.replaceState({from: 'direct'}, null, location.href);
-    }
+// Home nunchi back kottey direct exit
+window.addEventListener('load', function() {
+    history.replaceState({page: 'home'}, null, location.href);
 });
 
-window.addEventListener('popstate', function(e) {
-    // Hash/# link ayithe home lone undanivvu
-    if (location.hash || window.location.href.includes('#')) {
-        return;
-    }
-    
-    // Cart nunchi vachunte direct exit kottu
-    if (e.state && e.state.from === 'cart') {
-        history.go(-history.length);
-    }
-    // Lekapothe default back - em cheyyaku
+window.addEventListener('popstate', function() {
+    history.go(-history.length);
 });
 </script>
-
-
 
 
 </body>
