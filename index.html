@@ -1410,37 +1410,40 @@
     <p class="small text-secondary mb-0">© 2026 Swathi Pickles | Made with Love❤️</p>
   </div>
 </footer>
-    <!-- Bootstrap core JS-->
+   <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core theme JS - IDI OKATE UNDALI -->
 <script src="js/scripts.js"></script>
 
-<!-- BACK BUTTON HANDLE - FIXED -->
+<!-- BACK BUTTON HANDLE - NO FLASH VERSION -->
 <script>
-(function() {
-    // Page load ayyetappudu oka state set chey
-    history.replaceState({page: 'home', init: true}, null, location.href);
+// Page load ayyaka matrame run avvu - flash radu
+document.addEventListener('DOMContentLoaded', function() {
+    // Cart nunchi vachava leka fresh load aa check chey
+    if (document.referrer.includes('cart.html')) {
+        // Cart nunchi vachav - Back = Exit set chey
+        history.replaceState({from: 'cart'}, null, location.href);
+    } else {
+        // Fresh load - normal back behavior
+        history.replaceState({from: 'direct'}, null, location.href);
+    }
+});
+
+window.addEventListener('popstate', function(e) {
+    // Hash/# link ayithe home lone undanivvu
+    if (location.hash || window.location.href.includes('#')) {
+        return;
+    }
     
-    window.addEventListener('popstate', function(e) {
-        // 1. Hash/# link change ayithe em cheyyaku - home lone undanivvu
-        if (location.hash) {
-            return;
-        }
-        
-        // 2. Cart nunchi vachinappudu 'init' undadu, appudu normal back to home
-        if (!e.state || !e.state.init) {
-            // Inka em history ledu ante exit
-            if (history.length <= 1) {
-                history.go(-history.length);
-            } else {
-                // Cart nunchi vachav, so home lone unnav. Ippudu exit chey
-                history.go(-history.length);
-            }
-        }
-    });
-})();
+    // Cart nunchi vachunte direct exit kottu
+    if (e.state && e.state.from === 'cart') {
+        history.go(-history.length);
+    }
+    // Lekapothe default back - em cheyyaku
+});
 </script>
+
 
 
 

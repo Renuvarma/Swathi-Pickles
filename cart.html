@@ -647,16 +647,21 @@ capitalizeInput();
 loadSavedAddresses();
 checkPendingOrder();
 
-(function() {
-    history.pushState(null, null, location.href);
-    window.addEventListener('popstate', function() {
-        // location.href baddul replace vadite page full reload avthadi
-        // Anduke cart icon reset avthadi
-        location.replace('index.html');
-    });
-})();
+
 
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    history.pushState(null, null, location.href);
+});
+
+window.addEventListener('popstate', function() {
+    location.replace('index.html');
+});
+</script>
+</body>
+</html>
 
 </body>
 </html>
