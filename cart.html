@@ -7,7 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
 
-  <style>
+<style>
     @media (max-width: 768px) {
 .cart-item h5 { font-size: 1.2rem!important; }
 .cart-item p { font-size: 1rem!important; }
@@ -57,19 +57,66 @@
       font-weight: 600;
       margin-bottom: 15px;
    }
- .shipping-pending {
+.shipping-pending {
       color: #fd7e14;
       font-weight: 600;
       max-width: 60%;
    }
    @media (max-width: 768px) {
-    .shipping-pending {
+.shipping-pending {
          font-size: 0.85rem;
          text-align: right;
          max-width: 55%;
       }
    }
-  </style>
+
+/* MOBILE WARNING MODAL - COMPACT VERSION ✅ */
+@media (max-width: 768px) {
+  #orderConfirmModal .modal-dialog {
+    margin: 0.75rem;
+    max-width: calc(100% - 1.5rem);
+  }
+  #orderConfirmModal .modal-content {
+    border-radius: 10px;
+  }
+  #orderConfirmModal .modal-header {
+    padding: 0.6rem 0.9rem;
+  }
+  #orderConfirmModal .modal-title {
+    font-size: 1rem;
+  }
+  #orderConfirmModal .modal-title i {
+    font-size: 0.95rem;
+  }
+  #orderConfirmModal .modal-body {
+    padding: 0.9rem;
+    font-size: 0.85rem;
+  }
+  #orderConfirmModal .modal-body p {
+    margin-bottom: 0.5rem;
+  }
+  #orderConfirmModal .alert {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+  #orderConfirmModal .alert strong {
+    font-size: 0.8rem;
+  }
+  #orderConfirmModal .modal-footer {
+    padding: 0.6rem;
+    gap: 0.4rem;
+  }
+  #orderConfirmModal .modal-footer .btn {
+    font-size: 0.85rem;
+    padding: 0.45rem 0.6rem;
+    flex: 1;
+  }
+  #orderConfirmModal .modal-footer .btn i {
+    font-size: 0.8rem;
+  }
+}
+</style>
 </head>
 
 <body>
@@ -88,25 +135,10 @@
     <i class="bi bi-x-circle-fill"></i> No Cash on Delivery - Online Payment Only
   </div>
 
+  <!-- 1. CART ITEMS -->
   <div id="cart-items"></div>
 
-  <!-- SAVED ADDRESSES -->
-  <div id="savedAddressesSection" class="mt-4 d-none">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <h6 class="mb-0"><i class="bi bi-geo-alt-fill"></i> Saved Addresses</h6>
-      <span class="badge bg-success" id="addressCount">0</span>
-    </div>
-    <div id="savedAddressesList"></div>
-  </div>
-
-  <!-- ADD NEW ADDRESS BUTTON -->
-  <div class="mt-3" id="addNewAddressWrapper">
-    <button class="btn btn-primary w-100 py-2" onclick="showNewAddressForm()">
-      <i class="bi bi-plus-circle-fill"></i> Add New Address
-    </button>
-    
-  </div>
-
+  <!-- 2. SUBTOTAL BOX - PRODUCTS KINDA ✅ -->
   <div id="cart-summary-wrapper" class="d-none">
     <div class="cart-summary border p-3 mt-4">
       <div class="d-flex justify-content-between mb-2 summary-text">
@@ -125,72 +157,90 @@
       <p class="text-muted small text-center mb-0 mt-2">*Shipping cost will be added to final total</p>
     </div>
 
-    <div class="border p-3 mt-4 rounded" id="customerDetailsForm">
-      <h5 class="mb-3">
-        <span id="formTitle">Customer Details</span>
-        <span id="editingBadge" class="badge bg-info d-none ms-2">Editing</span>
-      </h5>
-      <p class="text-muted small">Please fill all fields to place order</p>
-
-      <div class="row g-3">
-        <input type="hidden" id="editingAddressId">
-        <div class="col-md-6">
-          <label class="form-label required">Full Name</label>
-          <input type="text" class="form-control capitalize" id="custName" placeholder="Enter your name">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label required">Mobile Number</label>
-          <input type="tel" class="form-control" id="custPhone" placeholder="10 digit number" maxlength="10">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Alternate Number</label>
-          <input type="tel" class="form-control" id="custAltPhone" placeholder="Optional" maxlength="10">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label required">PIN Code</label>
-          <input type="text" class="form-control" id="custPincode" placeholder="6 digits" maxlength="6">
-        </div>
-        <div class="col-12">
-          <label class="form-label required">Complete Address</label>
-          <textarea class="form-control capitalize" id="custAddress" rows="2" placeholder="House/Flat No, Street, Area"></textarea>
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Landmark</label>
-          <input type="text" class="form-control capitalize" id="custLandmark" placeholder="Near...">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label required">City</label>
-          <input type="text" class="form-control capitalize" id="custCity" placeholder="City">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label required">State</label>
-          <input type="text" class="form-control capitalize" id="custState" placeholder="State">
-        </div>
-        <div class="col-12">
-          <div class="save-address-box">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="saveAddress" checked>
-              <label class="form-check-label fw-bold" for="saveAddress">
-                <i class="bi bi-bookmark-star-fill text-warning"></i> Save this address
-              </label>
-              <p class="text-muted small mb-0 mt-1">Next order lo ee address select cheskovachu</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 d-none" id="cancelEditWrapper">
-          <button class="btn btn-secondary w-100" onclick="cancelEditAddress()">
-            <i class="bi bi-x-circle"></i> Cancel Edit
-          </button>
-        </div>
-      </div>
-    </div>
-
     <button class="btn btn-outline-dark mt-3 w-100 py-2" onclick="clearCart()">
       Clear Cart
     </button>
   </div>
+
+  <!-- 3. SAVED ADDRESSES - SUBTOTAL KINDA ✅ -->
+  <div id="savedAddressesSection" class="mt-4 d-none">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h6 class="mb-0"><i class="bi bi-geo-alt-fill"></i> Saved Addresses</h6>
+      <span class="badge bg-success" id="addressCount">0</span>
+    </div>
+    <div id="savedAddressesList"></div>
+  </div>
+
+  <!-- 4. ADD NEW ADDRESS BUTTON -->
+  <div class="mt-3" id="addNewAddressWrapper">
+    <button class="btn btn-primary w-100 py-2" onclick="showNewAddressForm()">
+      <i class="bi bi-plus-circle-fill"></i> Add New Address
+    </button>
+  </div>
+
+  <!-- 5. CUSTOMER DETAILS FORM -->
+  <div class="border p-3 mt-4 rounded" id="customerDetailsForm">
+    <h5 class="mb-3">
+      <span id="formTitle">Customer Details</span>
+      <span id="editingBadge" class="badge bg-info d-none ms-2">Editing</span>
+    </h5>
+    <p class="text-muted small">Please fill all fields to place order</p>
+
+    <div class="row g-3">
+      <input type="hidden" id="editingAddressId">
+      <div class="col-md-6">
+        <label class="form-label required">Full Name</label>
+        <input type="text" class="form-control capitalize" id="custName" placeholder="Enter your name">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label required">Mobile Number</label>
+        <input type="tel" class="form-control" id="custPhone" placeholder="10 digit number" maxlength="10">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Alternate Number</label>
+        <input type="tel" class="form-control" id="custAltPhone" placeholder="Optional" maxlength="10">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label required">PIN Code</label>
+        <input type="text" class="form-control" id="custPincode" placeholder="6 digits" maxlength="6">
+      </div>
+      <div class="col-12">
+        <label class="form-label required">Complete Address</label>
+        <textarea class="form-control capitalize" id="custAddress" rows="2" placeholder="House/Flat No, Street, Area"></textarea>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Landmark</label>
+        <input type="text" class="form-control capitalize" id="custLandmark" placeholder="Near...">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label required">City</label>
+        <input type="text" class="form-control capitalize" id="custCity" placeholder="City">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label required">State</label>
+        <input type="text" class="form-control capitalize" id="custState" placeholder="State">
+      </div>
+      <div class="col-12">
+        <div class="save-address-box">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="saveAddress" checked>
+            <label class="form-check-label fw-bold" for="saveAddress">
+              <i class="bi bi-bookmark-star-fill text-warning"></i> Save this address
+            </label>
+            <p class="text-muted small mb-0 mt-1">Next order lo ee address select cheskovachu</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 d-none" id="cancelEditWrapper">
+        <button class="btn btn-secondary w-100" onclick="cancelEditAddress()">
+          <i class="bi bi-x-circle"></i> Cancel Edit
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
+<!-- WHATSAPP BUTTON -->
 <div id="whatsapp-btn-wrapper" class="container py-3 d-none">
   <div class="d-grid">
     <button class="btn btn-success btn-lg" id="mainOrderBtn" onclick="validateAndOrder()">
@@ -199,7 +249,7 @@
   </div>
 </div>
 
-<!-- STRICT ORDER CONFIRMATION MODAL -->
+<!-- WARNING MODAL VUNDHI ✅ -->
 <div class="modal fade" id="orderConfirmModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -293,7 +343,7 @@ function loadSavedAddresses() {
   });
 
   const isAddingNew = document.getElementById('formTitle').innerText === 'Add New Address';
-  if (!selectedAddressId && addresses.length > 0 && cart.length > 0 &&!isAddingNew) {
+  if (!selectedAddressId && addresses.length > 0 &&!isAddingNew) {
     selectAddress(addresses[0].id);
   }
 }
@@ -559,10 +609,8 @@ function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pi
     });
 
     let message = `Welcome To SWATHI PICKLES\n\n`;
-
     message += `Order ID: ${orderId}\n`;
     message += `Date: ${orderDate}\n\n`;
-
     message += `CUSTOMER DETAILS\n`;
     message += `Name: ${name}\n`;
     message += `Mobile: ${phone}\n`;
@@ -573,7 +621,6 @@ function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pi
     message += `State: ${state}\n`;
     message += `Pincode: ${pincode}\n`;
     message += `Payment: Online Payment Only\n\n`;
-
     message += `ORDER ITEMS\n`;
 
     cart.forEach((item, index) => {
@@ -587,7 +634,6 @@ function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pi
     message += `Total Items: ${totalQty}\n`;
     message += `Subtotal: Rs.${subtotal}\n`;
     message += `Shipping: TBD (We will confirm shortly)\n\n`;
-
     message += `Thank You For Choosing Us!\n`;
     message += `We will contact you with shipping cost.\n`;
     message += `Delivery in 5-6 working days 🚚.\n\n`;
@@ -605,8 +651,6 @@ function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pi
 
     localStorage.setItem('pendingOrder', 'true');
     window.open(url, "_blank");
-
-    // ✅ DOTTED BOX + PAY NOW TEESINA - CUSTOMER WHATSAPP NUNCHI VELLIPOTHADU
 }
 
 function checkPendingOrder() {
@@ -647,7 +691,6 @@ capitalizeInput();
 loadSavedAddresses();
 checkPendingOrder();
 
-
 history.pushState(null, null, location.href);
 window.addEventListener('popstate', function() {
     sessionStorage.setItem('fromCart', 'true');
@@ -656,5 +699,3 @@ window.addEventListener('popstate', function() {
 </script>
 </body>
 </html>
-
-
