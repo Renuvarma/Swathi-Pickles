@@ -1416,22 +1416,27 @@
 <!-- Core theme JS -->
 <script src="js/scripts.js"></script>
 
-<!-- BACK BUTTON - DELAYED LOAD = NO INITIAL JERK -->
+<!-- BACK BUTTON + SCROLL FIX -->
 <script>
-// Page full ga load ayyi 1 sec aagaka run avvu
+// 1. Browser auto scroll ni aapu
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+}
+
+// 2. Page load ayyetappudu top ki pampu
 window.addEventListener('load', function() {
+    window.scrollTo(0, 0);
+    
+    // 3. Back button logic - 1 sec delay
     setTimeout(function() {
-        // Cart nunchi vachava check chey
         if (sessionStorage.getItem('fromCart') === 'true') {
             sessionStorage.removeItem('fromCart');
-            
-            // Ippudu back handler set chey - jerk last lone vastadi
             history.pushState(null, null, location.href);
             window.addEventListener('popstate', function() {
                 history.go(-history.length);
             });
         }
-    }, 1000); // 1 second delay
+    }, 1000);
 });
 </script>
 
