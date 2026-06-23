@@ -648,15 +648,13 @@ loadSavedAddresses();
 checkPendingOrder();
 
 
-
-</script>
-<script>
 history.pushState(null, null, location.href);
 window.addEventListener('popstate', function() {
-    // Home ki velletappudu flag set chey
     sessionStorage.setItem('fromCart', 'true');
     location.replace('index.html');
 });
 </script>
 </body>
 </html>
+
+

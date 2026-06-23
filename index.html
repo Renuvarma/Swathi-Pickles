@@ -1410,26 +1410,29 @@
     <p class="small text-secondary mb-0">© 2026 Swathi Pickles | Made with Love❤️</p>
   </div>
 </footer>
-    <!-- Bootstrap core JS-->
+   <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core theme JS -->
 <script src="js/scripts.js"></script>
 
-<!-- BACK BUTTON - ZERO JERK -->
+<!-- BACK BUTTON - DELAYED LOAD = NO INITIAL JERK -->
 <script>
-// Cart nunchi vachava ani sessionStorage lo check chey
-if (sessionStorage.getItem('fromCart') === 'true') {
-    sessionStorage.removeItem('fromCart'); // Clear chesey
-    
-    // Back handler add chey - kani history ni touch cheyyaku
-    window.addEventListener('popstate', function() {
-        history.go(-history.length);
-    });
-    
-    // Oka dummy state push chey - back button work avvali ani
-    history.pushState(null, null, location.href);
-}
+// Page full ga load ayyi 1 sec aagaka run avvu
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        // Cart nunchi vachava check chey
+        if (sessionStorage.getItem('fromCart') === 'true') {
+            sessionStorage.removeItem('fromCart');
+            
+            // Ippudu back handler set chey - jerk last lone vastadi
+            history.pushState(null, null, location.href);
+            window.addEventListener('popstate', function() {
+                history.go(-history.length);
+            });
+        }
+    }, 1000); // 1 second delay
+});
 </script>
 
 </body>
