@@ -57,13 +57,13 @@
       font-weight: 600;
       margin-bottom: 15px;
    }
-.shipping-pending {
+ .shipping-pending {
       color: #fd7e14;
       font-weight: 600;
       max-width: 60%;
    }
    @media (max-width: 768px) {
-   .shipping-pending {
+    .shipping-pending {
          font-size: 0.85rem;
          text-align: right;
          max-width: 55%;
@@ -90,7 +90,7 @@
 
   <div id="cart-items"></div>
 
-  <!-- SAVED ADDRESSES - EPPUDU KANAPADALI -->
+  <!-- SAVED ADDRESSES -->
   <div id="savedAddressesSection" class="mt-4 d-none">
     <div class="d-flex justify-content-between align-items-center mb-2">
       <h6 class="mb-0"><i class="bi bi-geo-alt-fill"></i> Saved Addresses</h6>
@@ -99,75 +99,14 @@
     <div id="savedAddressesList"></div>
   </div>
 
-  <!-- ADD NEW ADDRESS BUTTON - EPPUDU KANAPADALI -->
+  <!-- ADD NEW ADDRESS BUTTON -->
   <div class="mt-3" id="addNewAddressWrapper">
     <button class="btn btn-primary w-100 py-2" onclick="showNewAddressForm()">
       <i class="bi bi-plus-circle-fill"></i> Add New Address
     </button>
+    
   </div>
 
-  <!-- CUSTOMER DETAILS FORM - EPPUDU KANAPADALI -->
-  <div class="border p-3 mt-4 rounded" id="customerDetailsForm">
-    <h5 class="mb-3">
-      <span id="formTitle">Customer Details</span>
-      <span id="editingBadge" class="badge bg-info d-none ms-2">Editing</span>
-    </h5>
-    <p class="text-muted small">Please fill all fields to place order</p>
-
-    <div class="row g-3">
-      <input type="hidden" id="editingAddressId">
-      <div class="col-md-6">
-        <label class="form-label required">Full Name</label>
-        <input type="text" class="form-control capitalize" id="custName" placeholder="Enter your name">
-      </div>
-      <div class="col-md-6">
-        <label class="form-label required">Mobile Number</label>
-        <input type="tel" class="form-control" id="custPhone" placeholder="10 digit number" maxlength="10">
-      </div>
-      <div class="col-md-6">
-        <label class="form-label">Alternate Number</label>
-        <input type="tel" class="form-control" id="custAltPhone" placeholder="Optional" maxlength="10">
-      </div>
-      <div class="col-md-6">
-        <label class="form-label required">PIN Code</label>
-        <input type="text" class="form-control" id="custPincode" placeholder="6 digits" maxlength="6">
-      </div>
-      <div class="col-12">
-        <label class="form-label required">Complete Address</label>
-        <textarea class="form-control capitalize" id="custAddress" rows="2" placeholder="House/Flat No, Street, Area"></textarea>
-      </div>
-      <div class="col-md-4">
-        <label class="form-label">Landmark</label>
-        <input type="text" class="form-control capitalize" id="custLandmark" placeholder="Near...">
-      </div>
-      <div class="col-md-4">
-        <label class="form-label required">City</label>
-        <input type="text" class="form-control capitalize" id="custCity" placeholder="City">
-      </div>
-      <div class="col-md-4">
-        <label class="form-label required">State</label>
-        <input type="text" class="form-control capitalize" id="custState" placeholder="State">
-      </div>
-      <div class="col-12">
-        <div class="save-address-box">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="saveAddress" checked>
-            <label class="form-check-label fw-bold" for="saveAddress">
-              <i class="bi bi-bookmark-star-fill text-warning"></i> Save this address
-            </label>
-            <p class="text-muted small mb-0 mt-1">Next order lo ee address select cheskovachu</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 d-none" id="cancelEditWrapper">
-        <button class="btn btn-secondary w-100" onclick="cancelEditAddress()">
-          <i class="bi bi-x-circle"></i> Cancel Edit
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- CART SUMMARY - CART LO ITEMS UNTE MATRA KANAPADALI -->
   <div id="cart-summary-wrapper" class="d-none">
     <div class="cart-summary border p-3 mt-4">
       <div class="d-flex justify-content-between mb-2 summary-text">
@@ -184,6 +123,66 @@
         <h4><strong>₹<span id="grandTotal">0</span></strong></h4>
       </div>
       <p class="text-muted small text-center mb-0 mt-2">*Shipping cost will be added to final total</p>
+    </div>
+
+    <div class="border p-3 mt-4 rounded" id="customerDetailsForm">
+      <h5 class="mb-3">
+        <span id="formTitle">Customer Details</span>
+        <span id="editingBadge" class="badge bg-info d-none ms-2">Editing</span>
+      </h5>
+      <p class="text-muted small">Please fill all fields to place order</p>
+
+      <div class="row g-3">
+        <input type="hidden" id="editingAddressId">
+        <div class="col-md-6">
+          <label class="form-label required">Full Name</label>
+          <input type="text" class="form-control capitalize" id="custName" placeholder="Enter your name">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label required">Mobile Number</label>
+          <input type="tel" class="form-control" id="custPhone" placeholder="10 digit number" maxlength="10">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Alternate Number</label>
+          <input type="tel" class="form-control" id="custAltPhone" placeholder="Optional" maxlength="10">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label required">PIN Code</label>
+          <input type="text" class="form-control" id="custPincode" placeholder="6 digits" maxlength="6">
+        </div>
+        <div class="col-12">
+          <label class="form-label required">Complete Address</label>
+          <textarea class="form-control capitalize" id="custAddress" rows="2" placeholder="House/Flat No, Street, Area"></textarea>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Landmark</label>
+          <input type="text" class="form-control capitalize" id="custLandmark" placeholder="Near...">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label required">City</label>
+          <input type="text" class="form-control capitalize" id="custCity" placeholder="City">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label required">State</label>
+          <input type="text" class="form-control capitalize" id="custState" placeholder="State">
+        </div>
+        <div class="col-12">
+          <div class="save-address-box">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="saveAddress" checked>
+              <label class="form-check-label fw-bold" for="saveAddress">
+                <i class="bi bi-bookmark-star-fill text-warning"></i> Save this address
+              </label>
+              <p class="text-muted small mb-0 mt-1">Next order lo ee address select cheskovachu</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 d-none" id="cancelEditWrapper">
+          <button class="btn btn-secondary w-100" onclick="cancelEditAddress()">
+            <i class="bi bi-x-circle"></i> Cancel Edit
+          </button>
+        </div>
+      </div>
     </div>
 
     <button class="btn btn-outline-dark mt-3 w-100 py-2" onclick="clearCart()">
@@ -294,7 +293,7 @@ function loadSavedAddresses() {
   });
 
   const isAddingNew = document.getElementById('formTitle').innerText === 'Add New Address';
-  if (!selectedAddressId && addresses.length > 0 &&!isAddingNew) {
+  if (!selectedAddressId && addresses.length > 0 && cart.length > 0 &&!isAddingNew) {
     selectAddress(addresses[0].id);
   }
 }
@@ -401,13 +400,24 @@ function loadCart() {
   container.innerHTML = "";
 
   if(cart.length === 0){
-    container.innerHTML = `
-      <div class="text-center py-5">
-        <i class="bi bi-cart-x" style="font-size: 4rem; color: #dee2e6;"></i>
-        <h5 class="mt-3">Your cart is empty 😕</h5>
-        <a href="index.html" class="btn btn-dark mt-3 px-4 py-2">Shop Now</a>
-      </div>
-    `;
+    const addresses = JSON.parse(localStorage.getItem('savedAddresses')) || [];
+    if(addresses.length > 0){
+      container.innerHTML = `
+        <div class="text-center py-4">
+          <i class="bi bi-cart-x" style="font-size: 3rem; color: #dee2e6;"></i>
+          <p class="text-muted mt-2">Add items to cart to checkout</p>
+          <a href="index.html" class="btn btn-dark mt-2 px-4 py-2">Shop Now</a>
+        </div>
+      `;
+    } else {
+      container.innerHTML = `
+        <div class="text-center py-5">
+          <i class="bi bi-cart-x" style="font-size: 4rem; color: #dee2e6;"></i>
+          <h5 class="mt-3">Your cart is empty 😕</h5>
+          <a href="index.html" class="btn btn-dark mt-3 px-4 py-2">Shop Now</a>
+        </div>
+      `;
+    }
     summaryWrapper.classList.add('d-none');
     whatsappWrapper.classList.add('d-none');
     document.getElementById('codNotice').style.display = 'none';
@@ -595,6 +605,8 @@ function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pi
 
     localStorage.setItem('pendingOrder', 'true');
     window.open(url, "_blank");
+
+    // ✅ DOTTED BOX + PAY NOW TEESINA - CUSTOMER WHATSAPP NUNCHI VELLIPOTHADU
 }
 
 function checkPendingOrder() {
@@ -635,6 +647,7 @@ capitalizeInput();
 loadSavedAddresses();
 checkPendingOrder();
 
+
 history.pushState(null, null, location.href);
 window.addEventListener('popstate', function() {
     sessionStorage.setItem('fromCart', 'true');
@@ -643,3 +656,5 @@ window.addEventListener('popstate', function() {
 </script>
 </body>
 </html>
+
+
