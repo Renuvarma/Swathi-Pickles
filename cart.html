@@ -8,114 +8,182 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
-    @media (max-width: 768px) {
-.cart-item h5 { font-size: 1.2rem!important; }
-.cart-item p { font-size: 1rem!important; }
-.cart-item.btn-sm { padding: 0.5rem 0.8rem!important; font-size: 1rem!important; }
-.cart-item.fw-bold { font-size: 1.1rem!important; }
-.summary-text { font-size: 1rem!important; }
-      #grandTotal { font-size: 1.5rem!important; }
-.btn-success.btn-lg { font-size: 1.2rem!important; padding: 1rem!important; }
-    }
-.back-btn {
+    /* DESKTOP DEFAULT SIZES - CHINNAGA */
+    body { font-size: 0.95rem; }
+    h2 { font-size: 1.5rem; }
+    h4 { font-size: 1.2rem; }
+    h5 { font-size: 1.1rem; }
+    
+    .back-btn {
       position: sticky;
       top: 0;
       background: white;
       z-index: 100;
       border-bottom: 1px solid #dee2e6;
     }
-.cart-summary { background: #f8f9fa; border-radius: 8px; }
-.form-label { font-weight: 600; }
-.required::after { content: " *"; color: red; }
-.address-card {
+    .back-btn .btn {
+      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
+    }
+    .cart-summary { background: #f8f9fa; border-radius: 8px; }
+    .cart-summary h4 { font-size: 1.1rem; }
+    .form-label { font-weight: 600; font-size: 0.9rem; }
+    .form-control, .form-select { font-size: 0.9rem; }
+    .required::after { content: " *"; color: red; }
+    
+    .cart-item h5 { font-size: 1.05rem; }
+    .cart-item p { font-size: 0.9rem; margin-bottom: 0.4rem; }
+    .cart-item .btn-sm { padding: 0.3rem 0.6rem; font-size: 0.85rem; }
+    .cart-item .fw-bold { font-size: 0.95rem; }
+    
+    .summary-text { font-size: 0.9rem; }
+    #grandTotal { font-size: 1.2rem; }
+    .btn-success.btn-lg { font-size: 1rem; padding: 0.75rem; }
+    
+    .address-card {
       background: #f8f9fa;
       border: 2px solid #dee2e6;
       border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 10px;
+      padding: 10px;
+      margin-bottom: 8px;
       cursor: pointer;
       transition: all 0.2s;
-   }
-.address-card:hover { border-color: #0d6efd; }
-.address-card.selected {
+      font-size: 0.9rem;
+    }
+    .address-card:hover { border-color: #0d6efd; }
+    .address-card.selected {
       border-color: #198754;
       background: #d1e7dd;
-   }
-.save-address-box {
+    }
+    .address-card strong { font-size: 0.95rem; }
+    .address-card .badge { font-size: 0.7rem; }
+    .address-card .small { font-size: 0.8rem; }
+    
+    .save-address-box {
       background: #fff3cd;
       border: 2px solid #ffc107;
       border-radius: 8px;
-      padding: 12px;
-   }
-.no-cod-badge {
+      padding: 10px;
+      font-size: 0.9rem;
+    }
+    .save-address-box .form-check-label { font-size: 0.9rem; }
+    .save-address-box .small { font-size: 0.8rem; }
+    
+    .no-cod-badge {
       background: #ffe5e5;
       border: 1px solid #ff6b6b;
       color: #c92a2a;
       border-radius: 6px;
-      padding: 8px;
+      padding: 6px;
       text-align: center;
       font-weight: 600;
-      margin-bottom: 15px;
-   }
-.shipping-pending {
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+    }
+    .no-cod-badge i { font-size: 0.9rem; }
+    
+    .shipping-pending {
       color: #fd7e14;
       font-weight: 600;
       max-width: 60%;
-   }
-   @media (max-width: 768px) {
-.shipping-pending {
-         font-size: 0.85rem;
-         text-align: right;
-         max-width: 55%;
-      }
-   }
+      font-size: 0.85rem;
+    }
+    .text-muted.small { font-size: 0.8rem; }
+    .badge { font-size: 0.75rem; }
 
-/* MOBILE WARNING MODAL - COMPACT VERSION ✅ */
-@media (max-width: 768px) {
-  #orderConfirmModal .modal-dialog {
-    margin: 0.75rem;
-    max-width: calc(100% - 1.5rem);
-  }
-  #orderConfirmModal .modal-content {
-    border-radius: 10px;
-  }
-  #orderConfirmModal .modal-header {
-    padding: 0.6rem 0.9rem;
-  }
-  #orderConfirmModal .modal-title {
-    font-size: 1rem;
-  }
-  #orderConfirmModal .modal-title i {
-    font-size: 0.95rem;
-  }
-  #orderConfirmModal .modal-body {
-    padding: 0.9rem;
-    font-size: 0.85rem;
-  }
-  #orderConfirmModal .modal-body p {
-    margin-bottom: 0.5rem;
-  }
-  #orderConfirmModal .alert {
-    font-size: 0.8rem;
-    padding: 0.4rem 0.6rem;
-    margin-bottom: 0.5rem;
-  }
-  #orderConfirmModal .alert strong {
-    font-size: 0.8rem;
-  }
-  #orderConfirmModal .modal-footer {
-    padding: 0.6rem;
-    gap: 0.4rem;
-  }
-  #orderConfirmModal .modal-footer .btn {
-    font-size: 0.85rem;
-    padding: 0.45rem 0.6rem;
-    flex: 1;
-  }
-  #orderConfirmModal .modal-footer .btn i {
-    font-size: 0.8rem;
-  }
-}
+    /* MOBILE - INKA CHINNAGA */
+    @media (max-width: 768px) {
+      body { font-size: 0.9rem; }
+      h2 { font-size: 1.3rem; }
+      h4 { font-size: 1.05rem; }
+      h5 { font-size: 1rem; }
+      
+      .cart-item h5 { font-size: 1rem!important; }
+      .cart-item p { font-size: 0.85rem!important; }
+      .cart-item .btn-sm { padding: 0.25rem 0.5rem!important; font-size: 0.8rem!important; }
+      .cart-item .fw-bold { font-size: 0.9rem!important; }
+      
+      .summary-text { font-size: 0.85rem!important; }
+      #grandTotal { font-size: 1.1rem!important; }
+      .btn-success.btn-lg { font-size: 0.95rem!important; padding: 0.7rem!important; }
+      .btn-outline-dark { font-size: 0.85rem; padding: 0.5rem; }
+      .btn-primary { font-size: 0.9rem; }
+      
+      .form-label { font-size: 0.85rem; }
+      .form-control, .form-select { font-size: 0.85rem; padding: 0.4rem 0.6rem; }
+      
+      .address-card { padding: 8px; font-size: 0.85rem; }
+      .address-card strong { font-size: 0.9rem; }
+      .address-card .badge { font-size: 0.65rem; padding: 0.2rem 0.4rem; }
+      .address-card .small { font-size: 0.75rem; }
+      
+      .save-address-box { padding: 8px; font-size: 0.85rem; }
+      .save-address-box .form-check-label { font-size: 0.85rem; }
+      .save-address-box .small { font-size: 0.75rem; }
+      
+      .no-cod-badge { 
+        padding: 5px; 
+        font-size: 0.8rem; 
+        margin-bottom: 10px;
+      }
+      .no-cod-badge i { font-size: 0.85rem; }
+      
+      .shipping-pending {
+        font-size: 0.75rem;
+        text-align: right;
+        max-width: 55%;
+      }
+      
+      .text-muted.small { font-size: 0.75rem; }
+      .badge { font-size: 0.7rem; }
+    }
+
+    /* MOBILE WARNING MODAL - COMPACT VERSION */
+    @media (max-width: 768px) {
+      #orderConfirmModal .modal-dialog {
+        margin: 0.75rem;
+        max-width: calc(100% - 1.5rem);
+      }
+      #orderConfirmModal .modal-content {
+        border-radius: 10px;
+      }
+      #orderConfirmModal .modal-header {
+        padding: 0.6rem 0.9rem;
+      }
+      #orderConfirmModal .modal-title {
+        font-size: 1rem;
+      }
+      #orderConfirmModal .modal-title i {
+        font-size: 0.95rem;
+      }
+      #orderConfirmModal .modal-body {
+        padding: 0.9rem;
+        font-size: 0.85rem;
+      }
+      #orderConfirmModal .modal-body p {
+        margin-bottom: 0.5rem;
+      }
+      #orderConfirmModal .alert {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.6rem;
+        margin-bottom: 0.5rem;
+      }
+      #orderConfirmModal .alert strong {
+        font-size: 0.8rem;
+      }
+      #orderConfirmModal .modal-footer {
+        padding: 0.6rem;
+        gap: 0.4rem;
+      }
+      #orderConfirmModal .modal-footer .btn {
+        font-size: 0.85rem;
+        padding: 0.45rem 0.6rem;
+        flex: 1;
+      }
+      #orderConfirmModal .modal-footer .btn i {
+        font-size: 0.8rem;
+      }
+    }
 </style>
 </head>
 
