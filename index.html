@@ -1416,19 +1416,33 @@
 <!-- Core theme JS - IDI OKATE UNDALI -->
 <script src="js/scripts.js"></script>
 
-<!-- BACK BUTTON HANDLE - SINGLE BACK = EXIT -->
+<!-- BACK BUTTON HANDLE - FIXED -->
 <script>
-// Home nunchi back kottey direct exit
-window.addEventListener('load', function() {
-    history.replaceState({page: 'home'}, null, location.href);
-});
-
-window.addEventListener('popstate', function() {
-    history.go(-history.length);
-});
+(function() {
+    // Page load ayyetappudu oka state set chey
+    history.replaceState({page: 'home', init: true}, null, location.href);
+    
+    window.addEventListener('popstate', function(e) {
+        // 1. Hash/# link change ayithe em cheyyaku - home lone undanivvu
+        if (location.hash) {
+            return;
+        }
+        
+        // 2. Cart nunchi vachinappudu 'init' undadu, appudu normal back to home
+        if (!e.state || !e.state.init) {
+            // Inka em history ledu ante exit
+            if (history.length <= 1) {
+                history.go(-history.length);
+            } else {
+                // Cart nunchi vachav, so home lone unnav. Ippudu exit chey
+                history.go(-history.length);
+            }
+        }
+    });
+})();
 </script>
 
-</body>
-</html>
+
+
 </body>
 </html>
