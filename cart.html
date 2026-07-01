@@ -758,12 +758,11 @@ function confirmOrderSent(){
   cart = [];
   localStorage.removeItem('cart');
   localStorage.removeItem('pendingOrder');
-  loadCart();
+  
   if(orderModal) orderModal.hide();
-  alert('Order confirmed!\n\nThank you for your order 🙏\nWe will contact you shortly.');
-  setTimeout(() => {
-    window.location.href = 'index.html';
-  }, 1500);
+  
+  // Alert ledu, direct redirect
+  window.location.href = 'index.html';
 }
 
 function keepCart(){
