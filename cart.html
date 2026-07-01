@@ -343,7 +343,7 @@
   </div>
 </div> -->
 
-<!-- WARNING MODEL BOX - 2 ✅ -->
+<<!-- WARNING MODEL BOX - 2 ✅ -->
 <div class="modal fade" id="orderConfirmModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -351,10 +351,10 @@
         <p class="mb-0"><strong>Did you send the order message on WhatsApp?</strong></p>
       </div>
       <div class="modal-footer justify-content-center gap-3">
-        <button type="button" class="btn" style="background-color: #000; color: white;" onclick="keepCart()">
+        <button type="button" class="btn" style="background-color: #000; color: white; touch-action: manipulation;" id="keepCartBtn">
           <i class="bi bi-x-circle"></i> No, Keep My Cart
         </button>
-        <button type="button" class="btn btn-danger" onclick="confirmOrderSent()">
+        <button type="button" class="btn btn-danger" id="clearCartBtn" style="touch-action: manipulation;">
           <i class="bi bi-check-circle"></i> Yes, Clear Cart
         </button>
       </div>
@@ -362,10 +362,15 @@
   </div>
 </div>
 
+<style>
+/* Mobile click fix - icon meeda kotina button ke veltadi */
+.btn i { pointer-events: none; }
+</style>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
-let orderModal;
+let orderModal = null; // Global ga pettu
 let selectedAddressId = null;
 let currentShipping = 0;
 
@@ -723,8 +728,6 @@ function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pi
     message += `Shipping: TBD (We will confirm shortly)\n\n`;
     message += `🙏Thank You For Choosing Us!\n`;
     message += `We will contact you with shipping cost.\n`;
-   /* message += `Delivery in 5-6 working days 🚚.\n\n`;
-    message += `For queries: +91 9347333379`;*/
 
     let waPhone = "919347333379";
     let encodedMsg = encodeURIComponent(message);
@@ -743,28 +746,34 @@ function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pi
 function checkPendingOrder() {
   if (localStorage.getItem('pendingOrder') === 'true' && cart.length > 0) {
     setTimeout(() => {
-      orderModal = new bootstrap.Modal(document.getElementById('orderConfirmModal'));
+      const modalEl = document.getElementById('orderConfirmModal');
+      orderModal = new bootstrap.Modal(modalEl);
       orderModal.show();
     }, 500);
   }
 }
 
-/*function confirmOrderSent(){
+// FIX: Uncomment chesina function - Idi mobile lo panicheyyakapovadaniki main reason
+function confirmOrderSent(){
   cart = [];
   localStorage.removeItem('cart');
   localStorage.removeItem('pendingOrder');
   loadCart();
-  orderModal.hide();
+  if(orderModal) orderModal.hide();
   alert('Order confirmed!\n\nThank you for your order 🙏\nWe will contact you shortly.');
   setTimeout(() => {
     window.location.href = 'index.html';
   }, 1500);
-}*/
+}
 
 function keepCart(){
   localStorage.removeItem('pendingOrder');
-  orderModal.hide();
+  if(orderModal) orderModal.hide();
 }
+
+// Mobile kosam addEventListener - inline onclick kanna better
+document.getElementById('clearCartBtn').addEventListener('click', confirmOrderSent);
+document.getElementById('keepCartBtn').addEventListener('click', keepCart);
 
 document.addEventListener('visibilitychange', function() {
   if (!document.hidden) {
