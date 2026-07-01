@@ -317,8 +317,8 @@
   </div>
 </div>
 
-<!-- WARNING MODAL VUNDHI ✅ -->
-<div class="modal fade" id="orderConfirmModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+<!-- WARNING MODEL BOX - 1 ✅ -->
+<!-- <div class="modal fade" id="orderConfirmModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header bg-warning">
@@ -331,8 +331,27 @@
         </div>
         <p class="text-muted small">If you haven't sent yet, click "No" to keep your cart safe.</p>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="keepCart()">
+      <div class="modal-footer justify-content-center">
+  <button type="button" class="btn" style="background-color: #000; color: white;" onclick="keepCart()">
+  <i class="bi bi-x-circle"></i> No, Keep My Cart
+</button>
+  <button type="button" class="btn btn-danger" onclick="confirmOrderSent()">
+    <i class="bi bi-check-circle"></i> Yes, Clear Cart
+  </button>
+</div>
+    </div>
+  </div>
+</div> -->
+
+<!-- WARNING MODEL BOX - 2 ✅ -->
+<div class="modal fade" id="orderConfirmModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center pt-4">
+        <p class="mb-0"><strong>Did you send the order message on WhatsApp?</strong></p>
+      </div>
+      <div class="modal-footer justify-content-center gap-3">
+        <button type="button" class="btn" style="background-color: #000; color: white;" onclick="keepCart()">
           <i class="bi bi-x-circle"></i> No, Keep My Cart
         </button>
         <button type="button" class="btn btn-danger" onclick="confirmOrderSent()">
@@ -676,10 +695,10 @@ function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pi
         totalQty += item.qty;
     });
 
-    let message = `Welcome To SWATHI PICKLES\n\n`;
+    let message = `❤️Welcome To SWATHI PICKLES\n\n`;
     message += `Order ID: ${orderId}\n`;
     message += `Date: ${orderDate}\n\n`;
-    message += `CUSTOMER DETAILS\n`;
+    message += `👤CUSTOMER DETAILS\n`;
     message += `Name: ${name}\n`;
     message += `Mobile: ${phone}\n`;
     if (altPhone) message += `Alt Mobile: ${altPhone}\n`;
@@ -689,7 +708,7 @@ function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pi
     message += `State: ${state}\n`;
     message += `Pincode: ${pincode}\n`;
     message += `Payment: Online Payment Only\n\n`;
-    message += `ORDER ITEMS\n`;
+    message += `📦ORDER ITEMS\n`;
 
     cart.forEach((item, index) => {
         let itemTotal = item.price * item.qty;
@@ -698,14 +717,14 @@ function whatsappOrder(name, phone, altPhone, address, landmark, city, state, pi
         message += ` Qty: ${item.qty} x Rs.${item.price} = Rs.${itemTotal}\n\n`;
     });
 
-    message += `BILL SUMMARY\n`;
+    message += `💰BILL SUMMARY\n`;
     message += `Total Items: ${totalQty}\n`;
     message += `Subtotal: Rs.${subtotal}\n`;
     message += `Shipping: TBD (We will confirm shortly)\n\n`;
-    message += `Thank You For Choosing Us!\n`;
+    message += `🙏Thank You For Choosing Us!\n`;
     message += `We will contact you with shipping cost.\n`;
-    message += `Delivery in 5-6 working days 🚚.\n\n`;
-    message += `For queries: +91 9347333379`;
+   /* message += `Delivery in 5-6 working days 🚚.\n\n`;
+    message += `For queries: +91 9347333379`;*/
 
     let waPhone = "919347333379";
     let encodedMsg = encodeURIComponent(message);
@@ -730,7 +749,7 @@ function checkPendingOrder() {
   }
 }
 
-function confirmOrderSent(){
+/*function confirmOrderSent(){
   cart = [];
   localStorage.removeItem('cart');
   localStorage.removeItem('pendingOrder');
@@ -740,7 +759,7 @@ function confirmOrderSent(){
   setTimeout(() => {
     window.location.href = 'index.html';
   }, 1500);
-}
+}*/
 
 function keepCart(){
   localStorage.removeItem('pendingOrder');
